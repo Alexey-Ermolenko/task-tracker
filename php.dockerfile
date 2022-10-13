@@ -1,7 +1,7 @@
-FROM php:8.0.0-fpm
+FROM php:8.1.0-fpm
 
 # Copy composer.lock and composer.json
-# COPY composer.lock composer.json /var/www/
+COPY composer.lock composer.json /var/www/
 # Set working directory
 WORKDIR /var/www
 
@@ -34,7 +34,7 @@ RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 
 # Install composer
-# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
