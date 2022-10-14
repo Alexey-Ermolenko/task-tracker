@@ -32,7 +32,7 @@
                     <a class="nav-link" href="#contact">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn btn-outline-light btn-sm px-4" href="{{ route('login') }}">Login</a>
+                    <a class="nav-link btn btn-outline-primary btn-sm px-4" href="{{ route('login') }}">Login</a>
                 </li>
             </ul>
         </div>
