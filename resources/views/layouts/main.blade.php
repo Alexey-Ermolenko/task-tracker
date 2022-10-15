@@ -6,7 +6,8 @@
 </head>
 <body>
     <div class="container-fluid">
-        main
+        main layout
+        @yield('content')
     </div>
 </body>
 </html>

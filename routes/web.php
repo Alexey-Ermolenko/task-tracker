@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function() {
-    return view('layouts.landing');
-})->name('/');
-
 Route::get('/login', function() {
     return view('auth.login');
 })->name('login');
@@ -28,3 +25,10 @@ Route::get('/register', function() {
 Route::get('/reset/password', function() {
     return view('auth.passwords.email');
 })->name('password.request');
+
+
+Route::get('/', function() {
+    return view('layouts.landing');
+})->name('/');
+
+Route::get('/main', [HomeController::class, 'index']);
