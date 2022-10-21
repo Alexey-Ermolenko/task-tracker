@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Show the application dashboard.
@@ -15,6 +15,6 @@ class HomeController extends Controller
      */
     public function index(): Renderable
     {
-        return view('admin.index');
+        return view('company.index');
     }
 }

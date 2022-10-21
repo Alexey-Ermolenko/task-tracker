@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +33,13 @@ Route::get('/', function() {
     return view('layouts.landing');
 })->name('/');
 
-Route::get('/main', [HomeController::class, 'index']);
+Route::get('/main', [MainController::class, 'index'])->name('main');
+
+
+// Company Module
+Route::get('/company', [CompanyController::class, 'index'])->name('company');
+
+// Project Module
+Route::get('/project', [ProjectController::class, 'index'])->name('project');
+
+
