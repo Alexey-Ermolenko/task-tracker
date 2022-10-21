@@ -8,7 +8,7 @@
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo/favicon.ico') }}"/>
     <!-- Bootstrap CSS (jsDelivr CDN) -->
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
     <!-- Bootstrap Bundle JS (jsDelivr CDN) -->
     <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
