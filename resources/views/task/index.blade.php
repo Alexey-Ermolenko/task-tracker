@@ -10,7 +10,10 @@
             padding: 0px 3px 0px 3px;
             width: 270px;
         }
-        .card.draggable {
+        .kanban-col .card-body {
+            padding: 5px 5px;
+        }
+        .card .draggable {
             margin-bottom: 10px;
             cursor: grab;
             height: 65px;
@@ -37,9 +40,13 @@
         <div class="kanban-board row flex-row flex-sm-nowrap py-3">
             <div class="kanban-col col-sm-6 col-md-4 col-xl-3">
                 <div class="card bg-light">
-                    <div class="card-body">
+                    <div class="card-header">
                         <h6 class="card-title text-uppercase text-truncate py-2">To Do</h6>
+                    </div>
+                    <div class="card-body">
+
                         <div class="items border border-light">
+                            <div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"></div>
                             <div class="card draggable shadow-sm" id="cd0" draggable="true" ondragstart="drag(event)">
                                 <div class="card-body p-2">
                                     <p>
@@ -70,9 +77,12 @@
             </div>
             <div class="kanban-col col-sm-6 col-md-4 col-xl-3">
                 <div class="card bg-light">
-                    <div class="card-body">
+                    <div class="card-header">
                         <h6 class="card-title text-uppercase text-truncate py-2">In-progess</h6>
+                    </div>
+                    <div class="card-body">
                         <div class="items border border-light">
+                            <div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"></div>
                             <div class="card draggable shadow-sm" id="cd3" draggable="true" ondragstart="drag(event)">
                                 <div class="card-body p-2">
                                     <p>
@@ -95,9 +105,13 @@
             </div>
             <div class="kanban-col col-sm-6 col-md-4 col-xl-3">
                 <div class="card bg-light">
-                    <div class="card-body">
+                    <div class="card-header">
                         <h6 class="card-title text-uppercase text-truncate py-2">Review</h6>
+                    </div>
+                    <div class="card-body">
+
                         <div class="items border border-light">
+                            <div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"></div>
                             <div class="card draggable shadow-sm" id="cd5" draggable="true" ondragstart="drag(event)">
                                 <div class="card-body p-2">
                                     <p>
@@ -112,9 +126,12 @@
             </div>
             <div class="kanban-col col-sm-6 col-md-4 col-xl-3">
                 <div class="card bg-light">
-                    <div class="card-body">
+                    <div class="card-header">
                         <h6 class="card-title text-uppercase text-truncate py-2">Complete</h6>
+                    </div>
+                    <div class="card-body">
                         <div class="items border border-light">
+                            <div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"></div>
                             <div class="card draggable shadow-sm" id="cd6" draggable="true" ondragstart="drag(event)">
                                 <div class="card-body p-2">
                                     <p>
@@ -181,6 +198,7 @@
             $('.dropzone').remove();
 
             // insert new dropdzone after each item
+            dz.insertBefore('.card.draggable');
             dz.insertAfter('.card.draggable');
 
             // insert new dropzone in any empty swimlanes
