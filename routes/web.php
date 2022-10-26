@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,33 +21,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', function() {
-    return view('auth.login');
-})->name('login');
+Auth::routes();
 
-Route::get('/register', function() {
-    return view('auth.register');
-})->name('register');
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/reset/password', [LoginController::class, 'showLinkRequestForm'])->name('password.request');
 
-Route::get('/reset/password', function() {
-    return view('auth.passwords.email');
-})->name('password.request');
-
-
-Route::get('/', function() {
-    return view('layouts.landing');
-})->name('/');
-
-Route::get('/main', [MainController::class, 'index'])->name('main');
-
+Route::get('/', [LandingController::class, 'landingPage'])->middleware(['XSS'])->name('/');
+Route::get('/main', [MainController::class, 'index'])->middleware(['auth', 'XSS'])->name('main');
 
 // Company Module
-Route::get('/company', [CompanyController::class, 'index'])->name('company');
+Route::get('/company', [CompanyController::class, 'index'])->middleware(['auth'])->name('company');
 
 // Project Module
-Route::get('/project', [ProjectController::class, 'index'])->name('project');
+Route::get('/project', [ProjectController::class, 'index'])->middleware(['auth'])->name('project');
 
 // Task Module
-Route::get('/task', [TaskController::class, 'index'])->name('task');
+Route::get('/task', [TaskController::class, 'index'])->middleware(['auth'])->name('task');
 
 
+//require __DIR__.'/auth.php';

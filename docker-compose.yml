@@ -53,12 +53,16 @@ services:
     container_name: mysql
     environment:
       MYSQL_HOST: mysql
+      MYSQL_DATABASE: task_tracker_db
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
+    volumes:
+        - db-data:/var/lib/mysql
     ports:
-      - "3307:3307"
+      - "3306:3306"
     networks:
       - www
-
+volumes:
+  db-data:
 networks:
   www:

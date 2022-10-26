@@ -12,8 +12,8 @@
     <div class="container-fluid px-4">
         <h1 class="mt-4">Tasks</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="{{ route('main') }}}">Dashboard</a></li>
-            <li class="breadcrumb-item active">Tasks</li>
+            <li class="breadcrumb-item"><a href="{{ route('main') }}">{{__('Main')}}</a></li>
+            <li class="breadcrumb-item active">{{__('Tasks')}}</li>
         </ol>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <p>kanban tasks TODO</p>

@@ -31,9 +31,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#contact">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-outline-primary btn-sm px-4" href="{{ route('login') }}">Login</a>
-                </li>
+                @if (Route::has('login'))
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary btn-sm px-4" href="{{ route('main') }}">{{__('Main')}}</a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-primary btn-sm px-4" href="{{ route('login') }}">{{__('Login')}}</a>
+                        </li>
+                    @endif
+                @endif
             </ul>
         </div>
     </div>
