@@ -15,15 +15,16 @@
                         </div>
                         <div class="card-body">
                             <form name="my-form" action="{{ route('register') }}" method="post">
+                                @csrf
                                 <div class="mb-3 row">
-                                    <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
+                                    <label for="name" class="col-md-4 col-form-label text-md-right">{{__('Name')}}</label>
                                     <div class="col-md-6">
                                         <input type="text" id="name" class="form-control" name="name">
                                     </div>
                                 </div>
 
                                 <div class="mb-3 row">
-                                    <label for="email_address" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
+                                    <label for="email_address" class="col-md-4 col-form-label text-md-right">{{__('Email address')}}</label>
                                     <div class="col-md-6">
                                         <input type="text" id="email_address" class="form-control" name="email">
                                     </div>
@@ -45,7 +46,7 @@
                                     <div class="col-md-6 offset-md-4">
                                         <div class="checkbox">
                                             <input type="checkbox" class="custom-control-input" id="check-terms">
-                                            <label class="custom-control-label" for="check-terms">I agree to the <a href="#">terms and conditions</a></label>
+                                            <label class="custom-control-label" for="check-terms">{{__('I agree to the')}} <a href="#">{{__('terms and conditions')}}</a></label>
                                         </div>
                                     </div>
                                 </div>

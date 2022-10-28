@@ -7,6 +7,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,10 @@ Route::get('/reset/password', [LoginController::class, 'showLinkRequestForm'])->
 
 Route::get('/', [LandingController::class, 'landingPage'])->middleware(['XSS'])->name('/');
 Route::get('/main', [MainController::class, 'index'])->middleware(['auth', 'XSS'])->name('main');
+
+// Company Uses
+Route::get('profile',[UserController::class, 'profile'])->middleware(['auth','XSS'])->name('profile');
+Route::post('/profile',[UserController::class,'updateProfile'])->middleware(['auth','XSS'])->name('updateProfile');
 
 // Company Module
 Route::get('/company', [CompanyController::class, 'index'])->middleware(['auth'])->name('company');
