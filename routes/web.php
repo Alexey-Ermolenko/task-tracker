@@ -37,6 +37,9 @@ Route::post('/profile',[UserController::class,'updateProfile'])->middleware(['au
 
 // Company Module
 Route::get('/company', [CompanyController::class, 'index'])->middleware(['auth'])->name('company');
+Route::get('/company/{id}/view', [CompanyController::class, 'view'])->middleware(['auth'])->name('company.view');
+Route::get('/company/{id}/edit', [CompanyController::class, 'view'])->middleware(['auth'])->name('company.edit');
+
 
 // Project Module
 Route::get('/project', [ProjectController::class, 'index'])->middleware(['auth'])->name('project');

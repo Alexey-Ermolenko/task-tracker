@@ -1,3 +1,7 @@
 .avatar-block {
     text-align: center;
 }
+
+.company__item {
+    cursor: pointer;
+}

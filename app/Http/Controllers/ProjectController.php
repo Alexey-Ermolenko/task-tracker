@@ -11,10 +11,17 @@ class ProjectController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param Request $request
      * @return Renderable
      */
-    public function index(): Renderable
+    public function index(Request $request): Renderable
     {
+
+        $companyId = $request->session()->get('company_id');
+        $companyName = $request->session()->get('company_name');
+
+        /* TODO projects */
+
         return view('project.index');
     }
 }

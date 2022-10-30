@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -20,7 +22,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'type',
         'avatar',
         'created_by',
         'phone',
@@ -48,4 +49,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return BelongsToMany
+     */
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\Company', 'company_users', 'user_id', 'company_id')->withPivot('id')->withTimestamps();
+    }
+
+    /**
+     * Get Role that assigned in user
+     * @return HasOne
+     */
+    public function role(): HasOne
+    {
+        return $this->hasOne('App\Models\Role', 'code', 'role_id');
+    }
 }
