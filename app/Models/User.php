@@ -57,6 +57,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Company', 'company_users', 'user_id', 'company_id')->withPivot('id')->withTimestamps();
     }
+    /**
+     * @return BelongsToMany
+     */
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\Project', 'users_projects', 'user_id', 'project_id')->withPivot('id')->withTimestamps();
+    }
 
     /**
      * Get Role that assigned in user

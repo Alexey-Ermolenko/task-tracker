@@ -20,7 +20,7 @@
                         Company logo
                     </div>
                     <div class="card-body text-center">
-                        <img class="img-company-profile img-thumbnail" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                        <img class="img-company-profile img-thumbnail" src="https://via.placeholder.com/630x360.png" alt="">
                         <div class="small font-italic text-muted mb-4">Company logo</div>
                     </div>
                 </div>

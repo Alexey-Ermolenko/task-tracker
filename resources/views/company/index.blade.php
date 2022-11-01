@@ -15,7 +15,7 @@
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach($userCompanies as $company)
                     <div class="col">
-                        <div class="card shadow h-100 company__item" data-item="{{ $company->id }}">
+                        <div class="card h-100 company__item" data-item="{{ $company->id }}">
                             @if(isset($company->image) && !empty($company->image))
                                 <img src="{{ $company->image }}" class="card-img-top" alt="...">
                             @endif

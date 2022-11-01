@@ -38,11 +38,13 @@ Route::post('/profile',[UserController::class,'updateProfile'])->middleware(['au
 // Company Module
 Route::get('/company', [CompanyController::class, 'index'])->middleware(['auth'])->name('company');
 Route::get('/company/{id}/view', [CompanyController::class, 'view'])->middleware(['auth'])->name('company.view');
-Route::get('/company/{id}/edit', [CompanyController::class, 'view'])->middleware(['auth'])->name('company.edit');
+Route::get('/company/{id}/edit', [CompanyController::class, 'edit'])->middleware(['auth'])->name('company.edit');
 
 
 // Project Module
 Route::get('/project', [ProjectController::class, 'index'])->middleware(['auth'])->name('project');
+Route::get('/project/{id}/view', [ProjectController::class, 'view'])->middleware(['auth'])->name('project.view');
+Route::get('/project/{id}/edit', [ProjectController::class, 'edit'])->middleware(['auth'])->name('project.edit');
 
 // Task Module
 Route::get('/task', [TaskController::class, 'index'])->middleware(['auth'])->name('task');
