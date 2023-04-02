@@ -27,8 +27,10 @@ RUN apt-get update && apt-get install -y \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-RUN docker-php-ext-enable mysqli pdo pdo_mysql
+RUN apt-get update && \
+    apt-get install -y libpq-dev && \
+    docker-php-ext-install pdo pdo_pgsql pgsql
+RUN docker-php-ext-enable pdo pdo_pgsql pgsql
 # Install extensions
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug

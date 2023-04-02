@@ -8,10 +8,12 @@
     <div class="container-fluid px-4">
         <h1 class="mt-4">Projects</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="{{ route('main') }}}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('main') }}">{{__('Main')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('companies') }}">{{__('Companies')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('company.view', [Session::get('company_id')]) }}">{{__(Session::get('company_name'))}}</a></li>
             <li class="breadcrumb-item active">Projects</li>
         </ol>
-        @if(isset($companyProjects) && !empty($companyProjects) && count($companyProjects) > 0 && isset($userProjects) && !empty($userProjects) && count($userProjects))
+        @if(isset($companyProjects) && isset($userProjects) && !empty($userProjects) && count($userProjects))
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <div class="col-xl-3 col-md-6">
                     <div class="card shadow bg-pattern">
@@ -25,7 +27,7 @@
                     <div class="card shadow bg-pattern">
                         <div class="card-body">
                             <div class="float-right"><i class="fa fa-archive text-primary h4 ml-3"></i></div>
-                            <p class="text-muted mb-0">Current company total projects <span class="badge bg-secondary">{{ count($companyProjects) }}</span></p>
+                            <p class="text-muted mb-0">Current company total projects <span class="badge bg-secondary">{{ 'count($companyProjects)' }}</span></p>
                         </div>
                     </div>
                 </div>
@@ -65,11 +67,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($companyProjects as $project)
+                                    @foreach($companyProjects->items() as $project)
                                         <tr>
                                             <th scope="row">{{ $project->id }}</th>
                                             <td>
-                                                <a href="{{ route('project.view', $project->id) }}">
+                                                <a href="{{ route('project.view', [$companyId, $project->id]) }}">
                                                     {{ $project->name }}
                                                 </a>
                                             </td>
@@ -112,6 +114,8 @@
                                 </table>
                             </div>
                             <!-- end project-list -->
+
+                            {!! $companyProjects->links() !!}
 
                             <div class="pt-3">
                                 <ul class="pagination justify-content-end mb-0">

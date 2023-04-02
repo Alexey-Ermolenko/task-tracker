@@ -71,6 +71,13 @@ class User extends Authenticatable
      */
     public function role(): HasOne
     {
-        return $this->hasOne('App\Models\Role', 'code', 'role_id');
+        return $this->hasOne(Role::class, 'code', 'role_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(): bool {
+        return $this->role->name === Role::ADMIN_NAME;
     }
 }

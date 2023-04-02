@@ -15,9 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolesTableSeeder::class,
-            UsersTableSeeder::class
+            UsersTableSeeder::class,
+            CompaniesTableSeeder::class,
+            ProjectsTableSeeder::class
         ]);
 
-        $this->command->info('Данные загружены!!!');
+        $this->command->info('Тестовые данные загружены!!!');
     }
 }

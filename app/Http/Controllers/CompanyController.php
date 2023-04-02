@@ -29,11 +29,18 @@ class CompanyController extends Controller
      */
     public function view(int $id): Renderable
     {
+        Session::remove('company_id');
+        Session::remove('company_name');
+
         $company = Company::find($id);
 
-        Session::put('company_id', $company->id);
-        Session::put('company_name', $company->name);
+        if ($company) {
+            Session::put('company_id', $company->id);
+            Session::put('company_name', $company->name);
 
-        return view('company.view', compact('company'));
+            return view('company.view', compact('company'));
+        }
+
+        return view('errors.404');
     }
 }

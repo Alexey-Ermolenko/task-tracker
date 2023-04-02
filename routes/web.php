@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -36,18 +38,23 @@ Route::get('profile',[UserController::class, 'profile'])->middleware(['auth','XS
 Route::post('/profile',[UserController::class,'updateProfile'])->middleware(['auth','XSS'])->name('updateProfile');
 
 // Company Module
-Route::get('/company', [CompanyController::class, 'index'])->middleware(['auth'])->name('company');
-Route::get('/company/{id}/view', [CompanyController::class, 'view'])->middleware(['auth'])->name('company.view');
-Route::get('/company/{id}/edit', [CompanyController::class, 'edit'])->middleware(['auth'])->name('company.edit');
+Route::get('/companies', [CompanyController::class, 'index'])->middleware(['auth','XSS'])->name('companies');
+Route::get('/company/{id}/view', [CompanyController::class, 'view'])->middleware(['auth','XSS'])->name('company.view');
+Route::get('/company/{id}/edit', [CompanyController::class, 'edit'])->middleware(['auth','XSS'])->name('company.edit');
 
 
 // Project Module
-Route::get('/project', [ProjectController::class, 'index'])->middleware(['auth'])->name('project');
-Route::get('/project/{id}/view', [ProjectController::class, 'view'])->middleware(['auth'])->name('project.view');
-Route::get('/project/{id}/edit', [ProjectController::class, 'edit'])->middleware(['auth'])->name('project.edit');
+Route::get('/company/{company_id}/projects', [ProjectController::class, 'index'])->middleware(['auth','XSS'])->name('projects');
+Route::get('/company/{company_id}/project/{id}/view', [ProjectController::class, 'view'])->middleware(['auth','XSS'])->name('project.view');
+Route::get('/company/{company_id}/project/{id}/edit', [ProjectController::class, 'edit'])->middleware(['auth','XSS'])->name('project.edit');
 
 // Task Module
-Route::get('/task', [TaskController::class, 'index'])->middleware(['auth'])->name('task');
+Route::get('/company/{company_id}/project/{id}/tasks', [TaskController::class, 'index'])->middleware(['auth','XSS'])->name('task');
 
+// Calendar Module
+Route::get('/calendar/{pid?}/{project_id?}', [CalendarController::class, 'index'])->middleware(['auth','XSS'])->name('calendar');
+
+// Settings
+Route::get('/settings', [SettingsController::class, 'index'])->middleware(['auth','XSS'])->name('settings');
 
 //require __DIR__.'/auth.php';

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <link href="{{ asset('assets/css/kanban/demos.css') }}" rel="stylesheet">
+{{--    <link href="{{ asset('assets/css/kanban/demos.css') }}" rel="stylesheet">--}}
     <link href="{{ asset('assets/css/kanban/kanban.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/js/kanban/kanban.js') }}"></script>
 
@@ -13,6 +13,9 @@
         <h1 class="mt-4">Tasks</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('main') }}">{{__('Main')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('company.view', [Session::get('company_id')]) }}">{{__(Session::get('company_name'))}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('projects', [$companyId]) }}">{{__('Projects')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('project.view', [$companyId, $project->id]) }}">{{__('1111')}}</a></li>
             <li class="breadcrumb-item active">{{__('Tasks')}}</li>
         </ol>
         <div class="row row-cols-1 row-cols-md-3 g-4">

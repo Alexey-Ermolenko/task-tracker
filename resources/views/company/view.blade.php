@@ -9,7 +9,7 @@
         <h1 class="mt-4">{{ $company->name }}</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('main') }}">{{__('Main')}}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('company') }}">{{__('Companies')}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('companies') }}">{{__('Companies')}}</a></li>
             <li class="breadcrumb-item active">{{ $company->name }}</li>
         </ol>
         <div class="row">
@@ -45,7 +45,7 @@
                         Main company info
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
+                        <div class="mb-3 text-break">
                             <label class="labels">{{ $company->description }}</label>
                         </div>
                         <div class="mb-3">
@@ -67,7 +67,21 @@
                         Employers
                     </div>
                     <div class="card-body">
-                        ...
+                        @if(isset($company->users))
+                            <div class="team">
+                                @foreach($company->users as $user)
+                                    <a href="javascript: void(0);"
+                                       class="team-member"
+                                       data-toggle="tooltip"
+                                       data-placement="top"
+                                       title="{{ $user->name }}"
+                                       data-original-title="Roger Drake">
+                                        <img src="{{ $user->avatar }}" class="rounded-circle avatar-xs" alt="" />
+                                    </a>
+                                @endforeach
+                            </div>
+
+                        @endif
                     </div>
                 </div>
             </div>

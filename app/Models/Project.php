@@ -11,6 +11,11 @@ class Project extends Model
 {
     use HasFactory;
 
+    const ON_HOLD = 'On Hold';
+    const IN_PROGRESS = 'In Progress';
+    const COMPLETE = 'Complete';
+    const CANCELED = 'Canceled';
+
     /**
      * Таблица БД, ассоциированная с моделью.
      *
@@ -28,17 +33,17 @@ class Project extends Model
     ];
 
     public static $status = [
-        'on_hold' => 'On Hold',
-        'in_progress' => 'In Progress',
-        'complete' => 'Complete',
-        'canceled' => 'Canceled',
+        self::ON_HOLD,
+        self::IN_PROGRESS,
+        self::COMPLETE,
+        self::CANCELED
     ];
 
     public static $status_color = [
-        'on_hold' => 'warning',
-        'in_progress' => 'info',
-        'complete' => 'success',
-        'canceled' => 'danger',
+        self::ON_HOLD => 'warning',
+        self::IN_PROGRESS => 'info',
+        self::COMPLETE => 'success',
+        self::CANCELED => 'danger',
     ];
 
     /**
@@ -55,7 +60,7 @@ class Project extends Model
      * Get Company that assigned in project
      * @return HasOne
      */
-    public function role(): HasOne
+    public function company(): HasOne
     {
         return $this->hasOne('App\Models\Company', 'id', 'company_id');
     }

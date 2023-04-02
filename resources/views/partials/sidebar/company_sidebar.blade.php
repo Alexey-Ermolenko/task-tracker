@@ -9,7 +9,7 @@
                     </div>
                     {{__('Main')}}
                 </a>
-                <a class="nav-link" href="{{ route('company') }}">
+                <a class="nav-link" href="{{ route('companies') }}">
                     <div class="sb-nav-link-icon">
                         <i class="fa-solid fa-landmark"></i>
                     </div>
@@ -23,8 +23,7 @@
                 </a>
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="{{ route('project') }}">{{__('Projects')}}</a>
-                        <a class="nav-link" href="{{ route('task') }}">{{__('Tasks')}}</a>
+                        <a class="nav-link" href="{{ route('projects', [Session::get('company_id')]) }}">{{__('Projects')}}</a>
                         <a class="nav-link" href="#">Calendar</a>
                     </nav>
                 </div>
@@ -59,11 +58,11 @@
                     </nav>
                 </div>
                 <div class="sb-sidenav-menu-heading">Activity</div>
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="{{ route('calendar') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Calendar
                 </a>
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="{{ route('settings') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Settings
                 </a>

@@ -13,6 +13,15 @@ class Role extends Model
     const ADMIN = 1;
     const USER = 2;
 
+    const ADMIN_NAME = 'ADMIN';
+    const USER_NAME = 'USER';
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'user_roles';
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +39,6 @@ class Role extends Model
      */
     public function users(): HasMany
     {
-        return $this->hasMany('App\Models\User', 'role_id', 'code');
+        return $this->hasMany(User::class, 'role_id', 'code');
     }
 }
