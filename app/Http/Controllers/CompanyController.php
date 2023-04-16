@@ -18,7 +18,13 @@ class CompanyController extends Controller
      */
     public function index(): Renderable
     {
-        $userCompanies = Auth::user()->companies()->get();
+        $user = Auth::user();
+        $companyIds = $user->companies()->pluck('company_id')->toArray();
+        $companyIdsCreatedByUserId = Company::where('created_by', $user->id)->pluck('id')->toArray();
+
+        $totalIds = array_merge($companyIds, $companyIdsCreatedByUserId);
+
+        $userCompanies = Company::whereIn('id', array_values($totalIds))->get();
 
         return view('company.index', compact('userCompanies'));
     }

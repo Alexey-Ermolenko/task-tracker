@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -14,11 +16,17 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Renderable
      */
-    public function index($view = 'grid')
+    public function index(Request $request): Renderable
     {
+        return view('users.index', compact('request'));
+    }
 
+    public function view(int $id): Renderable
+    {
+        return view('users.view', compact('id'));
     }
 
     public function profile()

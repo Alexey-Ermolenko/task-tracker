@@ -24,24 +24,24 @@
                 <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                            Charts
+                            {{__('Task reports')}}
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="login.html">Chart report 1</a>
-                                <a class="nav-link" href="register.html">Chart report 2</a>
+                                <a class="nav-link" href="login.html">{{__('Task report 1')}}</a>
+                                <a class="nav-link" href="register.html">{{__('Task report 2')}}</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                            Tables
+                            {{__('Project reports')}}
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="401.html">Table report 1</a>
-                                <a class="nav-link" href="404.html">Table report 2</a>
-                                <a class="nav-link" href="500.html">Table report 3</a>
+                                <a class="nav-link" href="401.html">{{__('Project report 1')}}</a>
+                                <a class="nav-link" href="404.html">{{__('Project report 2')}}</a>
+                                <a class="nav-link" href="500.html">{{__('Project report 3')}}</a>
                             </nav>
                         </div>
                     </nav>

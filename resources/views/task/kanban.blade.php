@@ -1,27 +1,24 @@
 @extends('layouts.main')
 
 @section('title')
-    {{__('Tasks')}}
+    {{__('Kanban')}}
 @endsection
 
 @section('content')
-{{--    <link href="{{ asset('assets/css/kanban/demos.css') }}" rel="stylesheet">--}}
+    <link href="{{ asset('assets/css/kanban/demos.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/kanban/kanban.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/js/kanban/kanban.js') }}"></script>
 
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Tasks</h1>
-        <ol class="breadcrumb mb-4">
+        <h1 class="mt-4">Tasks | Kanban</h1>
+        <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('main') }}">{{__('Main')}}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('company.view', [Session::get('company_id')]) }}">{{__(Session::get('company_name'))}}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('projects', [$companyId]) }}">{{__('Projects')}}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('project.view', [$companyId, $project->id]) }}">{{__('1111')}}</a></li>
-            <li class="breadcrumb-item active">{{__('Tasks')}}</li>
+            <li class="breadcrumb-item"><a href="{{ route('project.view', [$companyId, $project->id]) }}">{{__($project->name)}}</a></li>
+            <li class="breadcrumb-item active">{{__('Kanban')}}</li>
         </ol>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <p>kanban tasks TODO</p>
-        </div>
-        <div class="kanban-board row flex-row flex-sm-nowrap py-3">
+        <div class="kanban-board card shadow row flex-row flex-sm-nowrap pb-3">
             <div class="g-wrap">
                 <div id="toolbar"></div>
                 <div id="root"></div>
@@ -30,27 +27,29 @@
     </div>
     <script>
         function getData() {
+            const url = "https://docs.dhtmlx.com/kanban-backend";
+
             const users = [
                 {
                     id: 1,
                     label: "Steve Smith",
-                    avatar: "https://via.placeholder.com/30/0000FF",
+                    avatar: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/user-4.jpg",
                     //avatar: "../assets/user.jpg",
                 },
                 {
                     id: 2,
                     label: "Aaron Long",
-                    avatar: "https://via.placeholder.com/30/FF0000",
+                    avatar: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/user-4.jpg",
                 },
                 {
                     id: 3,
                     label: "Angela Allen",
-                    avatar: "https://via.placeholder.com/30/00FF00",
+                    avatar: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/user-4.jpg",
                 },
                 {
                     id: 4,
                     label: "Angela Long",
-                    avatar: "https://via.placeholder.com/30/F0F0F0",
+                    avatar: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/user-4.jpg",
                 },
             ];
 
@@ -70,24 +69,32 @@
                         { id: 1, color: "#FF5252", label: "high" },
                         { id: 2, color: "#FFC975", label: "medium" },
                         { id: 3, color: "#65D3B3", label: "low" },
-                        { id: 3, color: "#65D3B3", label: "test" },
                     ],
                 },
                 color: true,
                 menu: true,
                 cover: true,
-                attached: false,
+                attached: true,
+                comments: true,
+                votes: true,
             };
 
             const editorShape = [
                 {
-                    type: "multiselect",
-                    key: "users",
-                    label: "Users",
-                    options: users,
+                    key: "attached",
+                    type: "files",
+                    label: "Files",
+                    uploadURL: url + "/uploads",
                 },
+                {
+                    type: "comments",
+                    key: "comments",
+                    label: "Comments",
+                    config: {
+                        placement: "editor",
+                    },
+                }
             ];
-
             const columns = [
                 {
                     label: "Backlog",
@@ -106,7 +113,6 @@
                     id: "done",
                 },
             ];
-
             const rows = [
                 {
                     label: "Feature",
@@ -128,6 +134,16 @@
                     users: [3, 2],
                     column: "backlog",
                     type: "feature",
+                    votes: [1],
+                    comments:[
+                        {
+                            id: 1,
+                            userId: 1,
+                            cardId: 1,
+                            text: "I look forward to seeing you at the integration meeting.",
+                            date: new Date(),
+                        },
+                    ]
                 },
                 {
                     label: "Archive the cards/boards ",
@@ -137,6 +153,39 @@
                     progress: 1,
                     column: "backlog",
                     type: "feature",
+                    attached: [
+                        {
+                            isCover: true,
+                            coverURL: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/img-1.jpg",
+                            previewURL: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/img-1.jpg",
+                            url: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/img-1.jpg",
+                            name: "img-1.jpg",
+                        },
+                        {
+                            isCover: false,
+                            coverURL: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/img-1.jpg",
+                            previewURL: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/img-1.jpg",
+                            url: "https://snippet.dhtmlx.com/codebase/data/kanban/01/img/img-1.jpg",
+                            name: "img-1.jpg",
+                        },
+                    ],
+                    comments: [
+                        {
+                            id: 1,
+                            userId: 1,
+                            cardId: 1,
+                            text: "Greetings, fellow colleagues. I would like to share my insights on this task. I reckon we should deal with at least half of the points in the plan without further delays. ",
+                            date: new Date(),
+                        },
+                        {
+                            id: 2,
+                            userId: 2,
+                            cardId: 1,
+                            text: "Hi, Aaron. I am sure that that's exactly what is thought best out there in Dunwall. Let's just do what we are supposed to do to get the result.",
+                            date: new Date(),
+                        },
+                    ],
+                    votes: [1, 3, 4],
                 },
                 {
                     label: "Searching and filtering",
@@ -246,6 +295,7 @@
                 editorShape,
             };
         }
+
         const { Kanban, Toolbar, defaultEditorShape } = kanban;
         const { columns, cards, rows, users, cardShape, editorShape } = getData();
 
@@ -255,8 +305,13 @@
             rows,
             rowKey: "type",
             cardShape,
-            editorShape: [...defaultEditorShape, ...editorShape],
+            editorShape: [
+                ...defaultEditorShape,
+                ...editorShape,
+            ],
+            currentUser: 1,
         });
+
         new Toolbar("#toolbar", {
             api: board.api,
         });

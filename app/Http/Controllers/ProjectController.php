@@ -14,23 +14,30 @@ class ProjectController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param Request $request
      * @param int $companyId
      * @return Renderable
      */
-    public function index(int $companyId): Renderable
+    public function index(Request $request, int $companyId): Renderable
     {
         $user = Auth::user();
-
         $userProjects = $user->projects()->get();
         $projectIds = $user->projects()->pluck('project_id')->toArray();
 
         $companyProjects = Project::whereIn('id', array_values($projectIds))
             ->where('company_id', $companyId)
             ->orderBy('id', 'asc')
-            ->paginate(10);
+            ->paginate(20);
 
-        $companyProjectsCompletedCount = 33;
-        $companyProjectsPending = 54;
+        $companyProjectsCompletedCount = Project::whereIn('id', array_values($projectIds))
+            ->where('company_id', $companyId)
+            ->whereIn('status', [Project::COMPLETE, Project::CANCELED])
+            ->count();
+
+        $companyProjectsPending = Project::whereIn('id', array_values($projectIds))
+            ->where('company_id', $companyId)
+            ->whereIn('status', [Project::ON_HOLD, Project::IN_PROGRESS])
+            ->count();
 
         /*if ($companyId) {
             $companyProjects->where('company_id', $companyId);

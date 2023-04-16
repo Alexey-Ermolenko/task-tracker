@@ -33,6 +33,10 @@ Route::get('/reset/password', [LoginController::class, 'showLinkRequestForm'])->
 Route::get('/', [LandingController::class, 'landingPage'])->middleware(['XSS'])->name('/');
 Route::get('/main', [MainController::class, 'index'])->middleware(['auth', 'XSS'])->name('main');
 
+// Users workers
+Route::get('/workers/index', [UserController::class, 'index'])->middleware(['auth', 'XSS'])->name('workers');
+Route::get('/workers/{user_id}/view', [UserController::class, 'view'])->middleware(['auth', 'XSS'])->name('worker.view');
+
 // Company Uses
 Route::get('profile',[UserController::class, 'profile'])->middleware(['auth','XSS'])->name('profile');
 Route::post('/profile',[UserController::class,'updateProfile'])->middleware(['auth','XSS'])->name('updateProfile');
@@ -44,12 +48,13 @@ Route::get('/company/{id}/edit', [CompanyController::class, 'edit'])->middleware
 
 
 // Project Module
-Route::get('/company/{company_id}/projects', [ProjectController::class, 'index'])->middleware(['auth','XSS'])->name('projects');
+Route::get('/company/{company_id}/projects/{pid?}', [ProjectController::class, 'index'])->middleware(['auth','XSS'])->name('projects');
 Route::get('/company/{company_id}/project/{id}/view', [ProjectController::class, 'view'])->middleware(['auth','XSS'])->name('project.view');
 Route::get('/company/{company_id}/project/{id}/edit', [ProjectController::class, 'edit'])->middleware(['auth','XSS'])->name('project.edit');
 
 // Task Module
-Route::get('/company/{company_id}/project/{id}/tasks', [TaskController::class, 'index'])->middleware(['auth','XSS'])->name('task');
+Route::get('/company/{company_id}/project/{id}/task-kanban', [TaskController::class, 'taskKanban'])->middleware(['auth','XSS'])->name('task-kanban');
+Route::get('/company/{company_id}/project/{id}/task-list', [TaskController::class, 'taskList'])->middleware(['auth','XSS'])->name('task-list');
 
 // Calendar Module
 Route::get('/calendar/{pid?}/{project_id?}', [CalendarController::class, 'index'])->middleware(['auth','XSS'])->name('calendar');

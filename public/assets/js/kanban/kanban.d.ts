@@ -1,10 +1,6 @@
 declare namespace kanban{
-type ToReactive<Type> = {
-    [Property in keyof Type]: IWritable<Type[Property]>;
-};
 type TID = number | string;
 type TDispatch<T> = <A extends keyof T>(action: A, data: T[A]) => void;
-type TEventHandler<T> = (ev: T) => void | boolean | Promise<void> | Promise<boolean>;
 interface DataHash {
     [key: string]: any;
 }
@@ -13,12 +9,15 @@ interface IWritable<T> {
     update: (fn: (v: T) => any) => any;
     set: (val: T) => any;
 }
-type TWritableCreator = (val: any, key: any) => IWritable<typeof val>;
+type TWritableCreator = (val: any) => IWritable<typeof val>;
 interface IEventBus<T> {
     exec(name: string, ev: any): void;
     setNext(next: TDispatch<T>): void;
 }
 
+type TState<Type> = {
+    [Property in keyof Type]: IWritable<Type[Property]>;
+};
 class Store<T extends DataHash> {
     private _state;
     private _values;
@@ -26,7 +25,7 @@ class Store<T extends DataHash> {
     constructor(writable: TWritableCreator);
     setState(data: Partial<T>): void;
     getState(): T;
-    getReactive(): ToReactive<T>;
+    getReactive(): TState<T>;
     private _wrapWritable;
 }
 
@@ -34,12 +33,12 @@ class EventBus<T> {
     private _handlers;
     protected _nextHandler: TDispatch<T>;
     constructor();
-    on<K extends keyof T = keyof T>(key: K, handler: TEventHandler<T[K]>): void;
-    exec<K extends keyof T = keyof T>(key: K, ev: T[K]): void;
+    on(name: string, handler: any): void;
+    exec(name: string, ev: any): void;
     setNext(next: TDispatch<T>): void;
 }
 
-function uid(): string;
+function tempID(): string;
 
 class ExportManager {
     private _store;
@@ -74,18 +73,21 @@ interface IUser {
     id: TID;
     label?: string;
     avatar?: string;
+    [key: string]: any;
 }
 interface ICard {
     id?: TID;
     label?: string;
     description?: string;
     progress?: number;
-    users?: any[];
+    users?: TID | TID[];
     end_date?: Date | string;
     start_date?: Date | string;
     color?: string;
     priority?: any;
     attached?: IAttachment[];
+    comments?: IComment[];
+    css?: string;
     [key: string]: any;
 }
 interface INormalizedCard extends ICard {
@@ -105,6 +107,7 @@ interface IRow {
     id: TID;
     label?: string;
     collapsed?: boolean;
+    css?: string;
 }
 interface IColumn {
     id: TID;
@@ -112,6 +115,8 @@ interface IColumn {
     limit?: number | Record<string, number>;
     strictLimit?: boolean;
     collapsed?: boolean;
+    css?: string;
+    overlay?: any;
 }
 type TAreaMeta = {
     columnId: TID;
@@ -156,6 +161,7 @@ interface IKanbanProps {
     readonly?: TReadonlyConfig;
     columnKey?: string;
     rowKey?: string;
+    links?: ILink[];
     scrollType?: TScrollType;
     renderType?: TRenderType;
     cardHeight?: number;
@@ -173,14 +179,11 @@ interface IDataStoreState {
     cardShape: ICardShape;
     columnShape?: IColumnShape;
     rowShape?: IRowShape;
-    editorShape?: TEditorShape[];
     cardsMeta: Record<TID, ICardMeta | undefined>;
+    links: ILink[];
     dragItemId: TID | null;
     before: TID | null;
     overAreaId?: TID | null;
-    dragItemAreaId?: TID | null;
-    dropAreaItemsCoords: TDropAreaItemsCoords | null;
-    dropAreasCoords: TDropAreasCoords | null;
     dragItemsCoords: TDragItemsCoords | null;
     search: ISearchConfig | null;
     selected?: TID[] | null;
@@ -191,6 +194,7 @@ interface IDataStoreState {
     cardHeight?: number | null;
     layout: TLayoutType;
     history: IHistory;
+    currentUser?: TID | null;
 }
 interface IHistoryConfig {
     ev: THandlersConfig[keyof THandlersConfig];
@@ -198,8 +202,8 @@ interface IHistoryConfig {
     undo: () => void;
 }
 interface IHistory {
-    undo: IHistoryConfig[];
-    redo: Omit<IHistoryConfig, "undo">[];
+    undo: (IHistoryConfig | string)[];
+    redo: (Omit<IHistoryConfig, "undo"> | string)[];
     batches: Record<string, IHistoryConfig[]>;
 }
 interface IScrollConfig {
@@ -217,11 +221,12 @@ interface ISortConfig {
     preserve?: boolean;
 }
 interface ISortItemOption extends ISortConfig {
-    label: string;
+    /** @deprecated use text instead */
+    label?: string;
+    text: string;
     id?: TID;
     icon?: TWxIcons;
 }
-type TDropAreaItemsCoords = Record<string, IRect[]>;
 type TDropAreasCoords = IRect[];
 type TDragItemsCoords = Record<string, IRect>;
 type TSearchRule = (card: INormalizedCard, value: string, by?: string) => boolean;
@@ -233,13 +238,28 @@ interface ISearchConfig {
 interface IMenuItem {
     id: string;
     icon?: TWxIcons;
-    label?: string;
+    text?: string;
+    disabled?: boolean;
 }
 type TMenuItemsFn<T> = (config: T) => IMenuItem[] | null;
 type TMenuItemsConfig<T> = IMenuItem[] | TMenuItemsFn<T> | null;
 interface ICardField {
     show?: boolean;
     config?: Record<string, any>;
+}
+interface IComment {
+    id: TID;
+    userId: TID;
+    cardId: TID;
+    text: string;
+    html?: string;
+    date: Date;
+}
+interface ILink {
+    id: TID;
+    masterId: TID;
+    slaveId: TID;
+    relation: TRelationOptions;
 }
 interface ICardShape {
     label: ICardField;
@@ -272,12 +292,16 @@ interface ICardShape {
         values?: string[];
     };
     cover?: ICardField;
+    comments?: ICardField;
     headerFields?: {
         key: string;
         css?: string;
         label?: string;
     }[];
+    css?: TCssProp;
+    votes?: ICardField;
 }
+type TCssProp = (obj: any) => string;
 type TCardShape = ObjectOrBoolean<ICardShape>;
 type CombineTypes<T, N> = {
     [P in keyof T]: T[P] extends Record<any, any> ? T[P] & N : (T[P] & N) | null;
@@ -294,6 +318,7 @@ interface IColumnShape {
             columnIndex: number;
         }>;
     };
+    css?: TCssProp;
 }
 type TColumnShape = ObjectOrBoolean<IColumnShape>;
 interface IRowShape {
@@ -305,6 +330,7 @@ interface IRowShape {
             rowIndex: number;
         }>;
     };
+    css?: TCssProp;
 }
 type TRowShape = ObjectOrBoolean<IRowShape>;
 interface IUploaderConfig {
@@ -366,10 +392,12 @@ type TColorFieldShape = TCommonShape & {
 };
 type TDateFieldShape = TCommonShape & {
     type: "date";
+    format?: string;
     config?: Record<string, any>;
 };
 type TDateRangeShape = TCommonShape & {
     type: "dateRange";
+    format?: string;
     key: {
         start: TID;
         end: TID;
@@ -381,7 +409,20 @@ type TFilesFieldShape = TCommonShape & {
     uploadURL?: string;
     config?: IUploaderConfig;
 };
-type TEditorShape = TTextFieldShape | TMultiselectFieldShape | TComboFieldShape | TProgressFieldShape | TColorFieldShape | TDateFieldShape | TFilesFieldShape | TDateRangeShape;
+type TCommentsShape = TCommonShape & {
+    type: "comments";
+    config?: {
+        format?: string;
+        placement?: "page" | "editor";
+        html?: boolean;
+    };
+};
+type TLinksShape = TCommonShape & {
+    type: "links";
+    values?: ILink[];
+    config?: {};
+};
+type TEditorShape = TTextFieldShape | TMultiselectFieldShape | TComboFieldShape | TProgressFieldShape | TColorFieldShape | TDateFieldShape | TFilesFieldShape | TDateRangeShape | TCommentsShape | TLinksShape;
 interface IReadonlyModes {
     edit?: boolean;
     add?: boolean;
@@ -436,14 +477,19 @@ interface ITemplateItem {
 }
 type IToolbarItem = IToolbarDefaultItem | ISearchItem | ISortItem | ITemplateItem;
 type TWxIcons = "wxi-alert" | "wxi-angle-dbl-down" | "wxi-angle-dbl-left" | "wxi-angle-dbl-right" | "wxi-angle-dbl-up" | "wxi-angle-down" | "wxi-angle-left" | "wxi-angle-right" | "wxi-angle-up" | "wxi-arrow-down" | "wxi-arrow-left" | "wxi-arrow-right" | "wxi-arrow-up" | "wxi-arrows-h" | "wxi-arrows-v" | "wxi-asc" | "wxi-assign" | "wxi-bullhorn" | "wxi-calendar" | "wxi-camera" | "wxi-cat" | "wxi-check" | "wxi-clock" | "wxi-close" | "wxi-content-copy" | "wxi-content-cut" | "wxi-content-paste" | "wxi-convert" | "wxi-delete-outline" | "wxi-delete" | "wxi-desc" | "wxi-dots-h" | "wxi-dots-v" | "wxi-download" | "wxi-duplicate" | "wxi-earth" | "wxi-edit" | "wxi-emoticon-outline" | "wxi-empty" | "wxi-external" | "wxi-eye" | "wxi-file" | "wxi-filter-check" | "wxi-filter-outline" | "wxi-folder" | "wxi-food-fork-drink" | "wxi-human-handsdown" | "wxi-indent" | "wxi-information-outline" | "wxi-loading" | "wxi-menu-down" | "wxi-menu-right" | "wxi-paperclip" | "wxi-paste" | "wxi-pin-outline" | "wxi-plus" | "wxi-pound" | "wxi-redo" | "wxi-refresh" | "wxi-rename" | "wxi-search" | "wxi-soccer" | "wxi-sort" | "wxi-split" | "wxi-star-outline" | "wxi-subtask" | "wxi-table-column-plus-after" | "wxi-table-row-plus-after" | "wxi-table-row-plus-before" | "wxi-undo" | "wxi-unindent" | "wxi-upload" | "wxi-view-column" | "wxi-view-grid" | "wxi-view-sequential";
+type TRelationOptions = "relatesTo" | "requiredFor" | "duplicate" | "parent";
+type ToReactive<Type> = {
+    [Property in keyof Type]: IWritable<Type[Property]>;
+};
 
 class DataStore extends Store<IDataStoreState> {
     in: EventBus<THandlersConfig>;
     out: EventBus<THandlersConfig>;
     sortRule?: (config: ISortConfig) => (a: ICard, b: ICard) => number;
     config: IStoreConfig;
-    private _handlersMap;
+    private _router;
     constructor(w: TWritableCreator, config?: IStoreConfig);
+    setState(state: Partial<IDataStoreState>, ctx?: any): void;
     init(state: Partial<Omit<IDataStoreState, "cards" | "readonly" | "cardShape" | "columnShape" | "rowShape">> & {
         cards: ICard[];
         readonly: TReadonlyConfig;
@@ -451,15 +497,10 @@ class DataStore extends Store<IDataStoreState> {
         columnShape: TColumnShape;
         rowShape: TRowShape;
     }): void;
-    getInnerState(state: Pick<IDataStoreState, "cards" | "rows" | "columns" | "columnKey" | "rowKey" | "sort">): {
-        cardsMap: TCardsMap;
-        areasMeta: TAreasMeta;
-    };
     undo(): void;
     redo(): void;
     protected _setHandlers(handlersMap: THandlersFunction): void;
     protected _initStructure(): void;
-    private _getSortedCards;
     private _computeLimits;
     private _normalizeCards;
     private _normalizeShapes;
@@ -522,20 +563,29 @@ type THandlersConfig = CombineTypes<{
         id: TID;
     };
     ["set-search"]: ISearchConfig;
-    ["before-drag"]: {
-        dragItemsCoords: IDataStoreState["dragItemsCoords"];
-        dropAreasCoords: IDataStoreState["dropAreasCoords"];
-    };
-    ["start-drag"]: {
-        dragItemId: TID;
-        overAreaId?: TID | null;
+    ["start-drag-card"]: {
+        id: TID;
+        rowId?: TID | null;
+        columnId: TID;
         before?: TID | null;
+        source: TID[];
+        dragItemsCoords: IDataStoreState["dragItemsCoords"] /** @deprecated will be removed in later versions */;
+        dropAreasCoords: TDropAreasCoords | null /** @deprecated will be removed in later versions */;
     };
-    ["drag"]: {
-        overAreaId?: TID | null;
+    ["drag-card"]: {
+        id: TID;
+        rowId?: TID | null;
+        columnId?: TID | null;
         before?: TID | null;
+        source: TID[];
     };
-    ["end-drag"]: null;
+    ["end-drag-card"]: {
+        id: TID;
+        rowId?: TID | null;
+        columnId?: TID | null;
+        before?: TID | null;
+        source: TID[];
+    };
     ["select-card"]: {
         id: TID;
         groupMode?: boolean;
@@ -548,6 +598,33 @@ type THandlersConfig = CombineTypes<{
         columnId?: TID;
     }) | null;
     ["set-edit"]: IEditConfig | null;
+    ["add-comment"]: {
+        id?: TID;
+        cardId: TID;
+        comment: Partial<Omit<IComment, "userId">>;
+    };
+    ["update-comment"]: {
+        id: TID;
+        cardId: TID;
+        comment: Partial<Omit<IComment, "userId">>;
+    };
+    ["delete-comment"]: {
+        id: TID;
+        cardId: TID;
+    };
+    ["add-link"]: {
+        id?: TID;
+        link: ILink;
+    };
+    ["delete-link"]: {
+        id: TID;
+    };
+    ["add-vote"]: {
+        cardId: TID;
+    };
+    ["delete-vote"]: {
+        cardId: TID;
+    };
 }, {
     $meta?: {
         skipHistory?: boolean;
@@ -563,7 +640,7 @@ const getDefaultCardMenuItems: ({ store }: {
 }) => {
     id: string;
     icon: string;
-    label: string;
+    text: string;
 }[];
 const getDefaultColumnMenuItems: ({ columns, columnIndex, }: {
     columns: IColumn[];
@@ -572,12 +649,12 @@ const getDefaultColumnMenuItems: ({ columns, columnIndex, }: {
 }) => ({
     id: string;
     icon: string;
-    label: string;
+    text: string;
     disabled?: undefined;
 } | {
     id: string;
     icon: string;
-    label: string;
+    text: string;
     disabled: boolean;
 })[];
 const getDefaultRowMenuItems: ({ rows, rowIndex, }: {
@@ -587,12 +664,12 @@ const getDefaultRowMenuItems: ({ rows, rowIndex, }: {
 }) => ({
     id: string;
     icon: string;
-    label: string;
+    text: string;
     disabled?: undefined;
 } | {
     id: string;
     icon: string;
-    label: string;
+    text: string;
     disabled: boolean;
 })[];
 
@@ -603,14 +680,13 @@ class Events {
     exec<K extends keyof THandlersConfig>(event: K, data: THandlersConfig[K]): void;
 }
 
+type TThemeConfig = {
+    name: string;
+    fonts: boolean;
+};
 interface IKanbanConfig extends IKanbanProps {
-    cardTemplate?: (config: {
-        data: ICard;
-        cardShape: ICardShape;
-        selected: boolean;
-        dragging: boolean;
-    }) => string;
     locale?: Record<string, any>;
+    theme?: TThemeConfig;
 }
 class Kanban {
     api: IApi;
@@ -650,6 +726,9 @@ class Kanban {
     moveRow(config: THandlersConfig["move-row"]): void;
     deleteColumn(config: THandlersConfig["delete-column"]): void;
     deleteRow(config: THandlersConfig["delete-row"]): void;
+    addComment(config: THandlersConfig["add-comment"]): void;
+    updateComment(config: THandlersConfig["update-comment"]): void;
+    deleteComment(config: THandlersConfig["delete-comment"]): void;
     selectCard(config: THandlersConfig["select-card"]): void;
     unselectCard(config: THandlersConfig["unselect-card"]): void;
     setSearch(config: THandlersConfig["set-search"]): void;
@@ -665,6 +744,7 @@ interface IToolbarConfig {
     api: IApi;
     items?: string[] | TItemTemplate[] | IToolbarItem[];
     locale?: Record<string, any>;
+    theme?: string;
 }
 class Toolbar {
     api: IApi;
@@ -690,13 +770,13 @@ class RestDataProvider extends EventBus<THandlersConfig> {
     getColumns(): Promise<IColumn[]>;
     getRows(): Promise<IRow[]>;
     getUsers(): Promise<IRow[]>;
-    protected getHandlers(handlers: Partial<Record<keyof THandlersConfig, any>>): Partial<Record<"add-card" | "update-card" | "delete-card" | "move-card" | "add-column" | "delete-column" | "update-column" | "move-column" | "add-row" | "delete-row" | "update-row" | "move-row" | "duplicate-card" | "set-search" | "before-drag" | "start-drag" | "drag" | "end-drag" | "select-card" | "unselect-card" | "scroll" | "set-sort" | "set-edit", any>>;
+    protected getHandlers(handlers: Partial<Record<keyof THandlersConfig, any>>): Partial<Record<"add-card" | "update-card" | "delete-card" | "move-card" | "add-column" | "delete-column" | "update-column" | "move-column" | "add-row" | "delete-row" | "update-row" | "move-row" | "duplicate-card" | "set-search" | "start-drag-card" | "drag-card" | "end-drag-card" | "select-card" | "unselect-card" | "scroll" | "set-sort" | "set-edit" | "add-comment" | "update-comment" | "delete-comment" | "add-link" | "delete-link" | "add-vote" | "delete-vote", any>>;
     setHeaders(headers: any): void;
     getIDResolver(): (id: TID, type: number) => TID;
     protected send<T>(url: string, method: string, data?: any, customHeaders?: any): Promise<T>;
     protected parseCards(data: ICard[]): ICard[];
     protected prepareCard(card: ICard): {
-        users: any[] | null;
+        users: TID | TID[] | null;
         id?: TID | undefined;
         label?: string | undefined;
         description?: string | undefined;
@@ -706,6 +786,8 @@ class RestDataProvider extends EventBus<THandlersConfig> {
         color?: string | undefined;
         priority?: any;
         attached?: IAttachment[] | undefined;
+        comments?: IComment[] | undefined;
+        css?: string | undefined;
     } | null;
 }
 
@@ -723,5 +805,5 @@ function kanbanUpdates(api: any, resolver: any): {
     rows: (obj: any) => void;
 };
 
-export { CombineTypes, ICardField, IDataStoreState, IEventBus, IHistoryConfig, IKanbanProps, IMoveCardConfig, IReadonlyModes, IRect, ISearchOption, ISortItemOption, IStoreConfig, IToolbarItem, IWritable, Kanban, ObjectOrBoolean, RemoteEvents, RestDataProvider, Store, TAreaMeta, TColorFieldShape, TColumnShape, TComboFieldShape, TDateFieldShape, TDateRangeShape, TDispatch, TEventHandler, TFilesFieldShape, THandlersFunction, TID, TItemTemplate, TMenuItemsConfig, TMultiselectFieldShape, TProgressFieldShape, TRowShape, TSortDir, TTextFieldShape, TWxIcons, Toolbar, defaultCardShape, defaultEditorShape, getDefaultCardMenuItems, getDefaultColumnMenuItems, getDefaultRowMenuItems, kanbanUpdates, uid };
+export { CombineTypes, ICardField, IDataStoreState, IEventBus, IHistoryConfig, IKanbanProps, IMoveCardConfig, IReadonlyModes, IRect, ISearchOption, ISortItemOption, IStoreConfig, IToolbarItem, Kanban, ObjectOrBoolean, RemoteEvents, RestDataProvider, Store, TAreaMeta, TColorFieldShape, TColumnShape, TComboFieldShape, TDateFieldShape, TDateRangeShape, TDispatch, TFilesFieldShape, THandlersFunction, TID, TItemTemplate, TMenuItemsConfig, TMultiselectFieldShape, TProgressFieldShape, TRowShape, TSortDir, TTextFieldShape, TWxIcons, Toolbar, defaultCardShape, defaultEditorShape, getDefaultCardMenuItems, getDefaultColumnMenuItems, getDefaultRowMenuItems, kanbanUpdates, tempID };
 }

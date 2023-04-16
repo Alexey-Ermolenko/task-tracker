@@ -18,32 +18,44 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card shadow bg-pattern">
                         <div class="card-body">
-                            <div class="float-right"><i class="fa fa-archive text-primary h4 ml-3"></i></div>
-                            <p class="text-muted mb-0">My total projects <span class="badge bg-secondary">{{ count($userProjects) }}</span></p>
+                            <p class="text-muted mb-0">
+                                <i class="fa fa-archive text-primary ml-3"></i>
+                                <a href="{{ route('projects', [Session::get('company_id'), 'my-total']) }}" class="">My total projects</a>
+                                <span class="badge bg-secondary">{{ count($userProjects) }}</span>
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card shadow bg-pattern">
                         <div class="card-body">
-                            <div class="float-right"><i class="fa fa-archive text-primary h4 ml-3"></i></div>
-                            <p class="text-muted mb-0">Current company total projects <span class="badge bg-secondary">{{ 'count($companyProjects)' }}</span></p>
+                            <p class="text-muted mb-0">
+                                <i class="fa fa-archive text-primary ml-3"></i>
+                                <a href="{{ route('projects', [Session::get('company_id'), 'company-total']) }}" class="">Current company total projects</a>
+                                <span class="badge bg-secondary">{{ count($companyProjects) }}</span>
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card shadow bg-pattern">
                         <div class="card-body">
-                            <div class="float-right"><i class="fa fa-th text-primary h4 ml-3"></i></div>
-                            <p class="text-muted mb-0">Current company completed projects <span class="badge bg-secondary">{{ $companyProjectsCompletedCount }}</span></p>
+                            <p class="text-muted mb-0">
+                                <i class="fa fa-th text-primary ml-3"></i>
+                                <a href="{{ route('projects', [Session::get('company_id'), 'company-completed']) }}" class="">Current company completed projects</a>
+                                <span class="badge bg-secondary">{{ $companyProjectsCompletedCount }}</span>
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card shadow bg-pattern">
                         <div class="card-body">
-                            <div class="float-right"><i class="fa fa-file text-primary h4 ml-3"></i></div>
-                            <p class="text-muted mb-0">Current company pending projects <span class="badge bg-secondary">{{ $companyProjectsPending }}</span></p>
+                            <p class="text-muted mb-0">
+                                <i class="fa fa-file text-primary ml-3"></i>
+                                <a href="{{ route('projects', [Session::get('company_id'), 'company-pending']) }}" class="">Current company pending projects</a>
+                                <span class="badge bg-secondary">{{ $companyProjectsPending }}</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -114,22 +126,7 @@
                                 </table>
                             </div>
                             <!-- end project-list -->
-
                             {!! $companyProjects->links() !!}
-
-                            <div class="pt-3">
-                                <ul class="pagination justify-content-end mb-0">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>

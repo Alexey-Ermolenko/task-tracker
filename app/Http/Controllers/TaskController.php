@@ -10,16 +10,30 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     /**
-     * Show the application dashboard.
+     * Show the kanban task dashboard.
      *
      * @param $companyId
      * @param $projectId
      * @return Renderable
      */
-    public function index($companyId, $projectId): Renderable
+    public function taskKanban($companyId, $projectId): Renderable
     {
         $project = Project::find($projectId);
 
-        return view('task.index', compact('companyId', 'project'));
+        return view('task.kanban', compact('companyId', 'project'));
+    }
+
+    /**
+     * Show the task list.
+     *
+     * @param $companyId
+     * @param $projectId
+     * @return Renderable
+     */
+    public function taskList($companyId, $projectId): Renderable
+    {
+        $project = Project::find($projectId);
+
+        return view('task.list', compact('companyId', 'project'));
     }
 }
