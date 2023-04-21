@@ -45,6 +45,14 @@ class Company extends Model
         return $this->hasMany('App\Models\Project', 'company_id', 'id');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany('App\Models\ProjectTask', 'company_id', 'id')->orderBy('id', 'desc');
+    }
+
     public function creator(): HasOne
     {
         return $this->hasOne('App\Models\User', 'id', 'created_by');

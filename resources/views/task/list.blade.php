@@ -11,64 +11,106 @@
 
     <div class="container-fluid px-4">
         <h1 class="mt-4">Tasks | List</h1>
-        <ol class="breadcrumb mb-4">
+        <ol class="breadcrumb mb-1">
             <li class="breadcrumb-item"><a href="{{ route('main') }}">{{__('Main')}}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('company.view', [Session::get('company_id')]) }}">{{__(Session::get('company_name'))}}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('projects', [$companyId]) }}">{{__('Projects')}}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('project.view', [$companyId, $project->id]) }}">{{__($project->name)}}</a></li>
             <li class="breadcrumb-item active">{{__('Task list')}}</li>
         </ol>
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            <p>tasks list</p>
+            <p>{{__('Task list')}}</p>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card shadow">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-centered table-nowrap table-hover">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="pt-3">
-                            <ul class="pagination justify-content-end mb-0">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-centered table-nowrap table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            #
+                                        </th>
+                                        <th scope="col">
+                                            Name
+                                        </th>
+                                        <th scope="col">
+                                            Priority
+                                        </th>
+                                        <th scope="col">
+                                            Created by
+                                        </th>
+                                        <th scope="col">
+                                            End date
+                                        </th>
+                                        <th scope="col">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td scope="col">
+                                        </td>
+                                        <td scope="col">
+                                            <input class="form-control" id="filter_name" type="text" placeholder="">
+                                        </td>
+                                        <td scope="col">
+                                            <input class="form-control" id="filter_priority" type="text" placeholder="">
+                                        </td>
+                                        <td scope="col">
+                                            <input class="form-control" id="filter_created_by" type="text" placeholder="">
+                                        </td>
+                                        <td scope="col">
+                                            <input class="form-control" id="filter_end_date" type="text" placeholder="">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>TASK-1</td>
+                                        <td>high</td>
+                                        <td>admin</td>
+                                        <td>04/26/2023</td>
+                                        <td>
+                                            ...
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>TASK-2</td>
+                                        <td>medium</td>
+                                        <td>admin</td>
+                                        <td>02/26/2023</td>
+                                        <td>
+                                            ...
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>TASK-3</td>
+                                        <td>low</td>
+                                        <td>admin</td>
+                                        <td>01/26/2023</td>
+                                        <td>
+                                            ...
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pt-3">
+                                <ul class="pagination justify-content-end mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

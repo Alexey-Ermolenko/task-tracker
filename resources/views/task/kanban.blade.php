@@ -10,7 +10,7 @@
     <script src="{{ asset('assets/js/kanban/kanban.js') }}"></script>
 
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Tasks | Kanban</h1>
+        <h1 class="mt-1">Tasks | Kanban</h1>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('main') }}">{{__('Main')}}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('company.view', [Session::get('company_id')]) }}">{{__(Session::get('company_name'))}}</a></li>

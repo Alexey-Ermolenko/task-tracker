@@ -54,7 +54,7 @@ Route::get('/company/{company_id}/project/{id}/edit', [ProjectController::class,
 
 // Task Module
 Route::get('/company/{company_id}/project/{id}/task-kanban', [TaskController::class, 'taskKanban'])->middleware(['auth','XSS'])->name('task-kanban');
-Route::get('/company/{company_id}/project/{id}/task-list', [TaskController::class, 'taskList'])->middleware(['auth','XSS'])->name('task-list');
+Route::get('/task-list', [TaskController::class, 'taskList'])->middleware(['auth','XSS'])->name('task-list');
 
 // Calendar Module
 Route::get('/calendar/{pid?}/{project_id?}', [CalendarController::class, 'index'])->middleware(['auth','XSS'])->name('calendar');

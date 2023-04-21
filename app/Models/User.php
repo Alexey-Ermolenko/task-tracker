@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -74,10 +75,35 @@ class User extends Authenticatable
         return $this->hasOne(Role::class, 'code', 'role_id');
     }
 
+    // Get assigned tasks
+    public function assigned_tasks(): HasOne
+    {
+        return $this->hasOne(ProjectTask::class, 'assign_to', 'id');
+    }
+
+
+
+    // Get followed tasks
+    public function follower_tasks(): Collection
+    {
+        /**
+         *  SELECT *
+         *    FROM project_tasks
+         *   WHERE exists(
+         *              SELECT 1
+         *                FROM jsonb_array_elements(followers) elem
+         *               WHERE elem::int = 9
+         *  );
+         *
+         * */
+        return ProjectTask::whereRaw('exists(select 1 from jsonb_array_elements(followers) elem where elem::int = ' . $this->id . ')')->get();
+    }
+
     /**
      * @return bool
      */
-    public function isAdmin(): bool {
+    public function isAdmin(): bool
+    {
         return $this->role->name === Role::ADMIN_NAME;
     }
 }

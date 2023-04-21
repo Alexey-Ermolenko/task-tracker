@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Project;
+use App\Models\ProjectTask;
 use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Filesystem\Filesystem;
@@ -9,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -21,7 +25,44 @@ class UserController extends Controller
      */
     public function index(Request $request): Renderable
     {
-        return view('users.index', compact('request'));
+        $authUser = Auth::user();
+
+        $session_company_id = Session::get('company_id');
+
+        $users = User::where('id', '!=', $authUser->id);
+        $company = null;
+        $project = null;
+        $task = null;
+
+        if ($request->has('company_id')) {
+            $users_ids = Company::find($request->company_id)->users->pluck('id')->toArray();
+            $company = Company::find($request->company_id);
+
+            $users->whereIn('id', $users_ids);
+        }
+
+        if ($request->has('project_id')) {
+            $users_ids = Project::find($request->project_id)->users->pluck('id')->toArray();
+            $project = Project::find($request->project_id);
+
+            $users->whereIn('id', $users_ids);
+        }
+
+        if ($request->has('task_id')) {
+            $users_ids = ProjectTask::find($request->task_id)->users->pluck('id')->toArray();
+            $task = ProjectTask::find($request->task_id);
+
+            $users->whereIn('id', $users_ids);
+        }
+
+        $array = [
+            'company' => $company,
+            'project' => $project,
+            'task' => $task,
+            'users' => $users->get()
+        ];
+
+        return view('users.index', compact('array'));
     }
 
     public function view(int $id): Renderable

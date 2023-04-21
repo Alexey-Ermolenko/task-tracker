@@ -22,9 +22,18 @@ class CompanySetter
         $companyId = Session::get('company_id');
 
         if (!$companyId) {
-            $parts = explode('/', $request->path());
-            if (count($parts) >= 2 && (int)$parts[1]) {
-                $company = Company::find($parts[1]);
+            $companyId = $request->get('company_id');
+            if (!$companyId) {
+                $parts = explode('/', $request->path());
+                if (count($parts) >= 2 && (int)$parts[1]) {
+                    $companyId = $parts[1];
+                } else {
+                    return $next($request);
+                }
+            }
+
+            if ($companyId) {
+                $company = Company::find($companyId);
 
                 if ($company) {
                     Session::put('company_id', $company->id);
@@ -32,8 +41,6 @@ class CompanySetter
                 } else {
                     return redirect()->route('companies');
                 }
-            } else {
-                return $next($request);
             }
         }
 

@@ -18,6 +18,7 @@ class CreateProjectTasksTable extends Migration
             $table->integer('project_id')->default(0);
             $table->integer('company_id')->default(0);
             $table->string('name');
+            $table->string('code', 255)->unique();
             $table->text('description')->nullable();
             $table->integer('stage_id')->default(0);
             $table->string('priority_color')->nullable();
