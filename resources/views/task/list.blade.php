@@ -20,11 +20,21 @@
             <p>{{__('Task list')}}</p>
         </div>
         <div class="row">
+            <pre>
+                <?php
+                    var_dump($company);
+                    var_dump($project);
+                    var_dump($task_array);
+                ?>
+            </pre>
+        </div>
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card shadow">
                     <div class="card-body">
                         <div class="row">
                             <div class="table-responsive">
+
                                 <table class="table table-sm table-centered table-nowrap table-hover">
                                     <thead>
                                     <tr>
@@ -65,36 +75,18 @@
                                             <input class="form-control" id="filter_end_date" type="text" placeholder="">
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>TASK-1</td>
-                                        <td>high</td>
-                                        <td>admin</td>
-                                        <td>04/26/2023</td>
-                                        <td>
-                                            ...
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>TASK-2</td>
-                                        <td>medium</td>
-                                        <td>admin</td>
-                                        <td>02/26/2023</td>
-                                        <td>
-                                            ...
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>TASK-3</td>
-                                        <td>low</td>
-                                        <td>admin</td>
-                                        <td>01/26/2023</td>
-                                        <td>
-                                            ...
-                                        </td>
-                                    </tr>
+                                    @foreach($task_array as $task)
+                                        <tr>
+                                            <th scope="row">{{ $task->id }}</th>
+                                            <td>{{ $task->code }}</td>
+                                            <td>{{ $task->priority }}</td>
+                                            <td>{{ $task->created_by }}</td>
+                                            <td>{{ $task->end_date }}</td>
+                                            <td>
+                                                ...
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>

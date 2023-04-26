@@ -41,19 +41,28 @@ class TaskController extends Controller
         $assignedTasksIds = $authUser->assigned_tasks()->pluck('id');
         $followerTasksIds = $authUser->follower_tasks()->pluck('id');
 
+        $task_array = [];
+        $company = null;
+        $project = null;
+
         $companyId = $request->get('company_id');
         if ($companyId) {
-            $company_ids = Company::find($companyId)->tasks->pluck('id')->toArray();
+            $company_task_ids = Company::find($companyId)->tasks->pluck('id')->toArray();
             $company = Company::find($companyId);
+
+            $projectTasks->whereIn('id', $company_task_ids);
         }
 
         $projectId = $request->get('project_id');
         if ($projectId) {
-            $project_ids = Project::find($companyId)->tasks->pluck('id')->toArray();
+            $project_task_ids = Project::find($companyId)->tasks->pluck('id')->toArray();
             $project = Project::find($projectId);
+
+            $projectTasks->whereIn('id', $project_task_ids);
         }
 
+        $task_array = $projectTasks->get();
 
-        return view('task.list');
+        return view('task.list', compact('task_array', 'company', 'project'));
     }
 }

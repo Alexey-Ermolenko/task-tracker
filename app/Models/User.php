@@ -81,8 +81,6 @@ class User extends Authenticatable
         return $this->hasOne(ProjectTask::class, 'assign_to', 'id');
     }
 
-
-
     // Get followed tasks
     public function follower_tasks(): Collection
     {
