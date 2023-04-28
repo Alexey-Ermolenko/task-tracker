@@ -25,10 +25,10 @@
                             <a class="nav-link" href="#">{{__('Settings')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('task-kanban', [$company->id, $project->id]) }}">{{__('Task Kanban board')}}</a>
+                            <a class="nav-link" href="{{ route('task.kanban', [$company->id, $project->id]) }}">{{__('Task Kanban board')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('task-list', [$company->id, $project->id]) }}">{{__('Task list')}}</a>
+                            <a class="nav-link" href="{{ route('task.list', [$company->id, $project->id]) }}">{{__('Task list')}}</a>
                         </li>
                     </ul>
                 </div>

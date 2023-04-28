@@ -65,4 +65,10 @@ class TaskController extends Controller
 
         return view('task.list', compact('task_array', 'company', 'project'));
     }
+
+    public function taskView(string $taskCode): Renderable
+    {
+
+        return view('task.view');
+    }
 }

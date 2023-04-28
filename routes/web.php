@@ -53,8 +53,9 @@ Route::get('/company/{company_id}/project/{id}/view', [ProjectController::class,
 Route::get('/company/{company_id}/project/{id}/edit', [ProjectController::class, 'edit'])->middleware(['auth','XSS'])->name('project.edit');
 
 // Task Module
-Route::get('/company/{company_id}/project/{id}/task-kanban', [TaskController::class, 'taskKanban'])->middleware(['auth','XSS'])->name('task-kanban');
-Route::get('/task-list', [TaskController::class, 'taskList'])->middleware(['auth','XSS'])->name('task-list');
+Route::get('/company/{company_id}/project/{id}/task-kanban', [TaskController::class, 'taskKanban'])->middleware(['auth','XSS'])->name('task.kanban');
+Route::get('/task-list', [TaskController::class, 'taskList'])->middleware(['auth','XSS'])->name('task.list');
+Route::get('/task/view/{code}', [TaskController::class, 'taskView'])->middleware(['auth','XSS'])->name('task.view');
 
 // Calendar Module
 Route::get('/calendar/{pid?}/{project_id?}', [CalendarController::class, 'index'])->middleware(['auth','XSS'])->name('calendar');

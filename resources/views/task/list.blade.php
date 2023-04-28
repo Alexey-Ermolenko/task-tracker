@@ -22,9 +22,9 @@
         <div class="row">
             <pre>
                 <?php
-                    var_dump($company);
-                    var_dump($project);
-                    var_dump($task_array);
+                   //var_dump($company);
+                   //var_dump($project);
+                   //var_dump($task_array);
                 ?>
             </pre>
         </div>
@@ -40,6 +40,9 @@
                                     <tr>
                                         <th scope="col">
                                             #
+                                        </th>
+                                        <th scope="col">
+                                            Code
                                         </th>
                                         <th scope="col">
                                             Name
@@ -66,6 +69,9 @@
                                             <input class="form-control" id="filter_name" type="text" placeholder="">
                                         </td>
                                         <td scope="col">
+                                            <input class="form-control" id="filter_name" type="text" placeholder="">
+                                        </td>
+                                        <td scope="col">
                                             <input class="form-control" id="filter_priority" type="text" placeholder="">
                                         </td>
                                         <td scope="col">
@@ -78,7 +84,10 @@
                                     @foreach($task_array as $task)
                                         <tr>
                                             <th scope="row">{{ $task->id }}</th>
-                                            <td>{{ $task->code }}</td>
+                                            <td>
+                                                <a href="{{ route('task.view', [$task->code]) }}">{{ $task->code }}</a>
+                                            </td>
+                                            <td>{{ $task->name }}</td>
                                             <td>{{ $task->priority }}</td>
                                             <td>{{ $task->created_by }}</td>
                                             <td>{{ $task->end_date }}</td>

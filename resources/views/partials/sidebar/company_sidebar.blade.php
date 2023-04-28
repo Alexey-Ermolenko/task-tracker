@@ -25,7 +25,7 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="{{ route('projects', [Session::get('company_id')]) }}">{{__('Projects')}}</a>
                         <a class="nav-link" href="{{ route('workers', ['company_id' => Session::get('company_id')]) }}">{{__('Workers')}}</a>
-                        <a class="nav-link" href="{{ route('task-list', ['company_id' => Session::get('company_id')]) }}">{{__('Task list')}}</a>
+                        <a class="nav-link" href="{{ route('task.list', ['company_id' => Session::get('company_id')]) }}">{{__('Task list')}}</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
