@@ -25,7 +25,7 @@ class CompanySetter
             $companyId = $request->get('company_id');
             if (!$companyId) {
                 $parts = explode('/', $request->path());
-                if (count($parts) >= 2 && (int)$parts[1]) {
+                if (count($parts) >= 2 && (int)$parts[1] && $parts[0] === 'company') {
                     $companyId = $parts[1];
                 } else {
                     return $next($request);

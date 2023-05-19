@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CalendarController;
@@ -62,5 +63,8 @@ Route::get('/calendar/{pid?}/{project_id?}', [CalendarController::class, 'index'
 
 // Settings
 Route::get('/settings', [SettingsController::class, 'index'])->middleware(['auth','XSS'])->name('settings');
+
+// Activity Log
+Route::get('/activity-log', [ActivityLogController::class, 'index'])->middleware(['auth','XSS'])->name('activity_log');
 
 //require __DIR__.'/auth.php';

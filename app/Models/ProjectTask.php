@@ -27,11 +27,35 @@ class ProjectTask extends Model
     ];
 
     /**
+     * Get users who followers task
+     *
      * @return mixed
      */
     public function users(): mixed
     {
-        return User::whereIn('id', explode(',', $this->assign_to))->get();
+        return User::whereIn('id', json_decode($this->followers))->get();
+    }
+
+    /**
+     * Get users who likes task
+     * @return mixed
+     */
+    public function likes_users(): mixed
+    {
+        return User::whereIn('id', json_decode($this->likes))->get();
+    }
+
+    public function assign(): HasOne
+    {
+        return $this->hasOne('App\Models\User', 'id', 'assign_to');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function creator(): HasOne
+    {
+        return $this->hasOne('App\Models\User', 'id', 'created_by');
     }
 
     /**
@@ -41,7 +65,7 @@ class ProjectTask extends Model
      */
     public function comments(): HasMany
     {
-        return $this->hasMany('App\Models\TaskComment', 'task_id', 'id')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\ProjectTaskComment', 'task_id', 'id')->orderBy('id', 'DESC');
     }
 
     /**
@@ -51,7 +75,7 @@ class ProjectTask extends Model
      */
     public function taskFiles(): HasMany
     {
-        return $this->hasMany('App\Models\TaskFile', 'task_id', 'id')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\ProjectTaskFile', 'task_id', 'id')->orderBy('id', 'DESC');
     }
 
     /**
@@ -59,9 +83,18 @@ class ProjectTask extends Model
      *
      * @return mixed
      */
-    public function activity_log(): mixed
+/*    public function activity_log(): mixed
     {
-        return ActivityLog::where('user_id', '=', Auth::user()->id)->where('project_id', '=', $this->project_id)->where('task_id', '=', $this->id)->get();
+        return ActivityLog::where('user_id', '=', Auth::user()->id)
+            ->where('project_id', '=', $this->project_id)
+            ->where('task_id', '=', $this->id)
+            ->get();
+    }*/
+
+    // get Project based activities
+    public function activity_log(): HasMany
+    {
+        return $this->hasMany('App\Models\ActivityLog', 'task_id', 'id')->orderBy('id', 'desc');
     }
 
     /**
@@ -71,7 +104,7 @@ class ProjectTask extends Model
      */
     public function stage(): HasOne
     {
-        return $this->hasOne('App\Models\TaskStage', 'id', 'stage_id');
+        return $this->hasOne('App\Models\ProjectTaskStages', 'id', 'stage_id');
     }
 
     /**

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Auth;
 
 class Project extends Model
 {
@@ -74,5 +75,16 @@ class Project extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany('App\Models\ProjectTask', 'project_id', 'id')->orderBy('id', 'desc');
+    }
+
+    // get Project based activities
+    public function activities(): HasMany
+    {
+        return $this->hasMany('App\Models\ActivityLog', 'project_id', 'id')->orderBy('id', 'desc');
+    }
+
+    public function task_stages(): HasMany
+    {
+        return $this->hasMany('App\Models\ProjectTaskStages', 'project_id', 'id')->orderBy('id', 'desc');
     }
 }

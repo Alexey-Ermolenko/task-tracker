@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CalendarController extends Controller
 {
     /**
-     * Show the application dashboard.
+     * Show the application calendar.
      *
      * @param string|null $task_by
      * @param int|null $project_id

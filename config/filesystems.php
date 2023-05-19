@@ -35,10 +35,28 @@ return [
             'root' => storage_path('app'),
         ],
 
-        'public' => [
+        'attachments' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'root' => storage_path('app/public/attachments'),
+            'url' => env('APP_URL').'/storage/attachments',
+            'visibility' => 'public',
+        ],
+        'avatars' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/avatars'),
+            'url' => env('APP_URL').'/storage/avatars',
+            'visibility' => 'public',
+        ],
+        'projects' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/projects'),
+            'url' => env('APP_URL').'/storage/projects',
+            'visibility' => 'public',
+        ],
+        'tasks' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/tasks'),
+            'url' => env('APP_URL').'/storage/tasks',
             'visibility' => 'public',
         ],
 
@@ -66,8 +84,8 @@ return [
     |
     */
 
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
+//    'links' => [
+//        public_path('storage') => storage_path('app/public'),
+//    ],
 
 ];

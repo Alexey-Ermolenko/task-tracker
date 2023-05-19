@@ -12,9 +12,6 @@
     <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
 
     <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet"/>
-    <!-- Bootstrap Bundle JS (jsDelivr CDN) -->
-    <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 
     <link href="{{ asset('assets/css/simple-datatables.css') }}" rel="stylesheet"/>
 
@@ -52,7 +49,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-user fa-fw"></i>
-                    <span>{{ Auth::user()->name }}</span>
+                    <span>{{ Auth::user() ? Auth::user()->name : null}}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li>
@@ -62,7 +59,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#!">Activity Log</a>
+                        <a class="dropdown-item" href="{{ route('activity_log', ['user_id' => Auth::user() ? Auth::user()->id : null]) }}">{{ __('Activity Log') }}</a>
                     </li>
                     <li><hr class="dropdown-divider"/></li>
                     <li>
@@ -177,13 +174,10 @@
         </div>
     </div>
 
+    <!-- Bootstrap Bundle JS (jsDelivr CDN) -->
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('assets/js/demo/chart-bar-demo.js') }}"></script>
-    <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="{{ asset('assets/js/demo/datatables-simple-demo.js') }}"></script>
 
     @stack('company_index_script')
 </body>

@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class TaskController extends Controller
 {
@@ -66,9 +67,38 @@ class TaskController extends Controller
         return view('task.list', compact('task_array', 'company', 'project'));
     }
 
+    /**
+     * @param string $taskCode
+     * @return Renderable
+     */
     public function taskView(string $taskCode): Renderable
     {
+        $projectTask = null;
+        $authUser = Auth::user();
 
-        return view('task.view');
+        $assignedTaskIds = $authUser->assigned_tasks()->pluck('id')->toArray();
+        $followerTaskIds = $authUser->follower_tasks()->pluck('id')->toArray();
+        $companyTaskIds = [];
+
+        $companyId = Session::get('company_id');
+        if ($companyId) {
+            $companyTaskIds = Company::find($companyId)->tasks->pluck('id')->toArray();
+        }
+
+        $userProjectTaskIds = array_unique(array_merge($assignedTaskIds, $followerTaskIds, $companyTaskIds));
+
+        if ($userProjectTaskIds) {
+            $projectTask = ProjectTask::where('code', $taskCode)
+                ->whereIn('id', $userProjectTaskIds)
+                ->get();
+        }
+
+        if ($projectTask[0]) {
+            $projectTask = $projectTask[0];
+        }
+
+        $projectStageList = $projectTask->project()?->get()[0]?->task_stages()->get()?->toArray();
+        //$projectStage['id'] === $projectTask->stage_id
+        return view('task.view' , compact('projectTask', 'projectStageList'));
     }
 }

@@ -14,7 +14,7 @@
             <div class="col-xl-12">
                 <div class="card shadow mb-4">
                     <div class="card-body">
-                        404 not found company
+                        404 not found
                     </div>
                 </div>
             </div>
