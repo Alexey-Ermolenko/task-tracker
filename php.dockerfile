@@ -36,7 +36,8 @@ RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# copy the Composer PHAR from the Composer image into the PHP image
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
