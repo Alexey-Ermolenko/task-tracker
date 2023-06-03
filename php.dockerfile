@@ -1,4 +1,5 @@
 FROM php:8.1.0-fpm
+MAINTAINER Aleksei Ermolenko <a.o.ermolenko@gmail.com>
 
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
@@ -23,7 +24,8 @@ RUN apt-get update && apt-get install -y \
     vim \
     unzip \
     git \
-    curl
+    curl \
+    postgresql-client
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install extensions
