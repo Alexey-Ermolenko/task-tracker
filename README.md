@@ -23,10 +23,10 @@
 
 5. Выполнить установку зависимостей `composer install`
 
-6. Выполнить миграции и заполнение данных:
+6. Выполнить миграции и заполнение данных: `php artisan migrate`
 
-   `php artisan migrate`
+   Можно выполнить 
+   `php artisan db:seed` или `php artisan command:ImportDump`
 
-   `php artisan db:seed`
 
 7. Веб-приложение доступно на `http://localhost:8083`
