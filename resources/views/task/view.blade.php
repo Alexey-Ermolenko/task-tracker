@@ -118,26 +118,38 @@
                         </div>
                         @endif
                         <div class="row mb-3">
-                            @if ($projectTask->likes_users() !== null && !empty($projectTask->likes_users()))
-                                <button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Disabled popover">
-                                    <button class="btn btn-primary" type="button">
-                                        <a href="javascript: void(0);" class="team-member" data-toggle="tooltip" data-placement="top" title="" data-original-title="wwww21312">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="rounded-circle avatar-xs" alt="" />
-                                    </a>
-                                    </button>
-                                </span>
-
-                                <div class="team">
-                                    @foreach($projectTask->likes_users() as $likes_user)
-                                        <a href="javascript: void(0);" class="team-member" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $likes_user->name}}">
-                                            <img src="{{ $likes_user->avatar}}" class="rounded-circle avatar-xs" alt="" />
-                                        </a>
-                                    @endforeach
-                                </div>
-                            @else
-                                likes: ...
-                            @endif
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Нравится</h6>
+                            </div>
+                            <div class="col-sm-9">
+                                <a tabindex="0" class="btn btn-outline-primary" role="button"
+                                   id="likeButton"
+                                   title="Users who liked"
+                                   data-bs-html="true"
+                                   data-bs-toggle="popover"
+                                   data-bs-trigger="focus"
+                                   data-bs-placement="right"
+                                   data-bs-content='
+                                   <div>
+                                        <div class="team">
+                                        @if ($projectTask->likes_users() !== null && !empty($projectTask->likes_users()))
+                                            @foreach($projectTask->likes_users() as $likes_user)
+                                                <a href="{{ route('worker.view', [$likes_user->id]) }}"
+                                                    class="team-member"
+                                                    data-bs-content="{{ $likes_user->name}}">
+                                                    <img src="{{ $likes_user->avatar}}" class="rounded-circle avatar-xs" alt="" />
+                                                </a>
+                                            @endforeach
+                                        @else
+                                            ...
+                                        @endif
+                                       </div>
+                                    </div>
+                                '>
+                                    <i class="fa-regular fa-thumbs-up" id="like-btn-icon"></i>
+                                    <span class="badge bg-secondary">3</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,20 +158,6 @@
                 <div class="card shadow mb-1">
                     <div class="card-body">
                         <h5>Люди</h5>
-                        <div class="team">
-                            <a href="javascript: void(0);" class="team-member" data-toggle="tooltip" data-placement="top" title="" data-original-title="Roger Drake">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="rounded-circle avatar-xs" alt="" />
-                            </a>
-
-                            <a href="javascript: void(0);" class="team-member" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reggie James">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-circle avatar-xs" alt="" />
-                            </a>
-
-                            <a href="javascript: void(0);" class="team-member" data-toggle="tooltip" data-placement="top" title="" data-original-title="Gerald Mayberry">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar8.png" class="rounded-circle avatar-xs" alt="" />
-                            </a>
-                        </div>
-
                         Наблюдатели:
                         @if ($projectTask->users() !== null && !empty($projectTask->users()))
                             @foreach($projectTask->users() as $follower)
@@ -168,6 +166,7 @@
                         @else
                             ...
                         @endif
+
                         </br>
                         Назначено: {{ $projectTask->assign->name }}</br>
                         Кем создано: {{ $projectTask->creator->name }}</br>
@@ -304,4 +303,46 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var likeButton = document.getElementById('likeButton');
+            var popoverInstance;
+
+            likeButton.addEventListener('click', function(event) {
+                //event.stopPropagation(); // Остановка всплытия события клика для предотвращения закрытия popover при клике на кнопку "лайк"
+                var likeCount = document.querySelector('#likeButton .badge');
+                var count = parseInt(likeCount.textContent);
+
+                if (likeButton.classList.contains('btn-outline-primary')) {
+                    likeButton.classList.remove('btn-outline-primary');
+                    likeButton.classList.add('btn-primary');
+                    likeCount.textContent = count + 1;
+                } else {
+                    likeButton.classList.remove('btn-primary');
+                    likeButton.classList.add('btn-outline-primary');
+                    likeCount.textContent = count - 1;
+                }
+            });
+
+            likeButton.addEventListener('mouseenter', function() {
+                if (!popoverInstance) {
+                    popoverInstance = new bootstrap.Popover(likeButton); // Создание popover
+                    popoverInstance.show(); // Показ popover
+                    var popoverElement = document.querySelector('.popover');
+                    popoverElement.addEventListener('mouseleave', function() {
+                        popoverInstance.hide(); // Закрытие popover при уходе мыши с него
+                        popoverInstance = null;
+                    });
+                }
+            });
+
+            likeButton.addEventListener('shown.bs.popover', function() {
+                popoverInstance = bootstrap.Popover.getInstance(likeButton); // Получение ссылки на popoverInstance
+            });
+
+            likeButton.addEventListener('hidden.bs.popover', function() {
+                //popoverInstance = null; // Сброс ссылки на popoverInstance при скрытии popover
+            });
+        });
+    </script>
 @endsection

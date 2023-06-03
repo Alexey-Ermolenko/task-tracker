@@ -17,7 +17,10 @@
 
     <!-- TODO -->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-
+    <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
+    <!-- Bootstrap Bundle JS (jsDelivr CDN) -->
+    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     @stack('calendar-lib-script')
 </head>
 <body class="sb-nav-fixed">
@@ -174,8 +177,7 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle JS (jsDelivr CDN) -->
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+
 
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
 

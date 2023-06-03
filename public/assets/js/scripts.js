@@ -7,6 +7,10 @@
 // Scripts
 //
 
+$(document).ready(function(){
+    $('[data-bs-toggle="popover"]').popover();
+});
+
 window.addEventListener('DOMContentLoaded', event => {
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
