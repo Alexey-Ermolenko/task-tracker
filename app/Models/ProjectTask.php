@@ -42,7 +42,13 @@ class ProjectTask extends Model
      */
     public function likes_users(): mixed
     {
-        return User::whereIn('id', json_decode($this->likes))->get();
+        $likes_users = null;
+
+        if ($this->likes) {
+             $likes_users = User::whereIn('id', json_decode($this->likes))->get();
+        }
+
+        return $likes_users;
     }
 
     public function assign(): HasOne

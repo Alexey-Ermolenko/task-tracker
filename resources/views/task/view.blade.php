@@ -79,7 +79,7 @@
                                 <h6 class="mb-0">Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" value="{{ $projectTask->name }}" disabled class="form-control">
+                                <input type="text" value="{{ $projectTask->name }}" class="form-control">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -87,7 +87,7 @@
                                 <h6 class="mb-0">Приоритет {{ $projectTask->priority_color }}</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" value="{{ $projectTask->priority }}" disabled class="form-control">
+                                <input type="text" value="{{ $projectTask->priority }}" class="form-control">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -104,16 +104,8 @@
                                 <h6 class="mb-0">Progress</h6>
                             </div>
                             <div class="col-sm-9">
-                                <div class="progress mt-2" style="height: 20px;">
-                                    <div class="progress-bar bg-success"
-                                         role="progressbar"
-                                         style="width: {{ $projectTask->progress }}%;"
-                                         aria-valuenow="{{ $projectTask->progress }}"
-                                         aria-valuemin="0"
-                                         aria-valuemax="100">
-                                        {{ $projectTask->progress }}%
-                                    </div>
-                                </div>
+                                <label for="task_progress" id="task_progress_label"></label>
+                                <input type="range" style="width: 100%" id="task_progress" name="task_progress" min="0" max="100" step="20" value="{{ $projectTask->progress }}">
                             </div>
                         </div>
                         @endif
@@ -136,8 +128,8 @@
                                             @foreach($projectTask->likes_users() as $likes_user)
                                                 <a href="{{ route('worker.view', [$likes_user->id]) }}"
                                                     class="team-member"
-                                                    data-bs-content="{{ $likes_user->name}}">
-                                                    <img src="{{ $likes_user->avatar}}" class="rounded-circle avatar-xs" alt="" />
+                                                    data-bs-content="{{ $likes_user->name }}">
+                                                    <img src="{{ $likes_user->avatar}}" class="rounded-circle avatar-xs" alt="{{ $likes_user->name }}" />
                                                 </a>
                                             @endforeach
                                         @else
@@ -158,40 +150,50 @@
                 <div class="card shadow mb-1">
                     <div class="card-body">
                         <h5>Люди</h5>
-                        Наблюдатели:
-                        @if ($projectTask->users() !== null && !empty($projectTask->users()))
-                            @foreach($projectTask->users() as $follower)
-                                {{ $follower->name . ', '}}
-                            @endforeach
-                        @else
-                            ...
-                        @endif
-
-                        </br>
-                        Назначено: {{ $projectTask->assign->name }}</br>
-                        Кем создано: {{ $projectTask->creator->name }}</br>
+                        <div class="row mb-1">
+                            <div class="col-sm-12">
+                                Наблюдатели:
+                                @if ($projectTask->users() !== null && !empty($projectTask->users()))
+                                    @foreach($projectTask->users() as $follower)
+                                        {{ $follower->name . ', '}}
+                                    @endforeach
+                                @else
+                                    ...
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-sm-12">
+                                Назначено: {{ $projectTask->assign->name }}
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-sm-12">
+                                Кем создано: {{ $projectTask->creator->name }}</br>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card shadow mb-1">
                     <div class="card-body">
                         <h5>Даты</h5>
-                        <div class="row mb-3">
+                        <div class="row mb-0">
                             <div class="col-sm-6">
                                 <h6 class="mb-0">Дата начала работ:</h6>
                             </div>
                             <div class="col-sm-6">
-                                <p>{{ $projectTask->start_date }}</p>
+                                <input id="start_date" name="start_date" class="form-control" type="date" value="{{ $projectTask->start_date }}"/>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-0">
                             <div class="col-sm-6">
                                 <h6 class="mb-0">Срок:</h6>
                             </div>
                             <div class="col-sm-6">
-                                <p>{{ $projectTask->end_date }}</p>
+                                <input id="end_date" name="start_date" class="form-control" type="date" value="{{ $projectTask->end_date }}"/>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-0">
                             <div class="col-sm-6">
                                 <h6 class="mb-0">Создан:</h6>
                             </div>
@@ -199,7 +201,7 @@
                                 <p>{{ $projectTask->created_at }}</p>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-0">
                             <div class="col-sm-6">
                                 <h6 class="mb-0">Обновлен:</h6>
                             </div>
@@ -217,7 +219,7 @@
                     <div class="card-body">
                         <h5>Описание</h5>
                         <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled>{{ $projectTask->description }}</textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">{{ $projectTask->description }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -272,12 +274,14 @@
                         <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
                             <img src="{{ $projectTask->creator->avatar }}" width="50" class="rounded-circle me-2">
                             <input type="text" class="form-control" placeholder="Enter your comment...">
-                            <button type="button" class="btn btn-primary">Send</button>
+                            <button type="button" class="btn btn-primary">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
                         </div>
                         <div class="container-fluid mb-5">
                             @if(isset($projectTask->comments) && !empty($projectTask->comments))
                                 @foreach($projectTask->comments as $comment)
-                                    <div class="d-flex flex-row p-3">
+                                    <div class="d-flex flex-row py-0 px-3">
                                         <img src="{{ $comment->user->avatar }}" width="40" height="40" class="rounded-circle me-3">
                                         <div class="w-100">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -288,11 +292,16 @@
                                             </div>
                                             <p class="text-justify comment-text mb-0">{{ $comment->comment }}</p>
                                             <div class="btn-group btn-sm" role="group">
-                                                <button type="button" class="btn btn-primary btn-sm">Edit</button>
-                                                <button type="button" class="btn btn-primary btn-sm">Delete</button>
+                                                <button type="button" class="btn btn-primary btn-sm comment-edit-btn" data-task-id="{{ $comment->id }}">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm comment-delete-btn" data-task-id="{{ $comment->id }}">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr/>
                                 @endforeach
                             @else
                                 ...
@@ -303,6 +312,26 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="comment_modal" tabindex="-1" aria-labelledby="comment_modal_label" aria-hidden="true" data-comment-id="">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="comment_modal_label"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" id="comment" style="height: 100px"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var likeButton = document.getElementById('likeButton');
@@ -342,6 +371,28 @@
 
             likeButton.addEventListener('hidden.bs.popover', function() {
                 //popoverInstance = null; // Сброс ссылки на popoverInstance при скрытии popover
+            });
+
+            var rangeInput = document.getElementById('task_progress');
+            var rangeLabel = document.getElementById('task_progress_label');
+
+            function updateRangeLabel() {
+                rangeLabel.textContent = rangeInput.value + '%';
+            }
+
+            updateRangeLabel();
+            rangeInput.addEventListener('input', updateRangeLabel);
+
+            $('#comment_modal')[0].addEventListener('shown.bs.modal', function(event) {
+                alert('shown.bs.modal');
+            });
+
+            $('.comment-edit-btn').click(function() {
+                $('#comment_modal').modal('show');
+            });
+
+            $('.comment-delete-btn').click(function() {
+                alert('comment-delete-btn');
             });
         });
     </script>
