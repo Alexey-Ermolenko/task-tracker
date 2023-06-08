@@ -114,7 +114,7 @@
                                 <h6 class="mb-0">Нравится</h6>
                             </div>
                             <div class="col-sm-9">
-                                <a tabindex="0" class="btn btn-outline-primary" role="button"
+                                <a tabindex="0" class="btn {{ array_search($authUser->id, json_decode($projectTask->likes), true) === false ? 'btn-outline-primary' : 'btn-primary' }}" role="button"
                                    id="likeButton"
                                    title="Users who liked"
                                    data-bs-html="true"
@@ -139,7 +139,14 @@
                                     </div>
                                 '>
                                     <i class="fa-regular fa-thumbs-up" id="like-btn-icon"></i>
-                                    <span class="badge bg-secondary">3</span>
+                                    <span class="badge bg-secondary"
+                                          id="like-count-span"
+                                          data-user-likes="{{ json_encode($projectTask->likes_users(), JSON_UNESCAPED_UNICODE) }}"
+                                          data-user="{{ json_encode($authUser, JSON_UNESCAPED_UNICODE) }}"
+                                          data-task="{{ json_encode($projectTask, JSON_UNESCAPED_UNICODE) }}"
+                                    >
+                                        {{ count($projectTask->likes_users()) }}
+                                    </span>
                                 </a>
                             </div>
                         </div>
@@ -346,10 +353,12 @@
                     likeButton.classList.remove('btn-outline-primary');
                     likeButton.classList.add('btn-primary');
                     likeCount.textContent = count + 1;
+                    sendLikeData(true);
                 } else {
                     likeButton.classList.remove('btn-primary');
                     likeButton.classList.add('btn-outline-primary');
                     likeCount.textContent = count - 1;
+                    sendLikeData(false);
                 }
             });
 
@@ -395,5 +404,29 @@
                 alert('comment-delete-btn');
             });
         });
+
+        function sendLikeData(isLiked) {
+            let token = $('meta[name="csrf-token"]').attr('content');
+            let userLikes = $('#likeButton .badge').data('userLikes');
+            let user = $('#likeButton .badge').data('user');
+            let task = $('#likeButton .badge').data('task');
+            let countLikes = +$('#likeButton .badge').text();
+
+            let data = {
+                _token: token,
+                user: user,
+                task: task,
+                isLiked: isLiked
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('task.likes') }}',
+                data: data,
+                success: function(data) {
+                    console.log('1');
+                },
+            });
+        }
     </script>
 @endsection

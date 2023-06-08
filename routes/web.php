@@ -68,3 +68,6 @@ Route::get('/settings', [SettingsController::class, 'index'])->middleware(['auth
 Route::get('/activity-log', [ActivityLogController::class, 'index'])->middleware(['auth','XSS'])->name('activity_log');
 
 //require __DIR__.'/auth.php';
+
+
+Route::post('/likes', [TaskController::class, 'likes'])->middleware(['auth','XSS'])->name('task.likes');

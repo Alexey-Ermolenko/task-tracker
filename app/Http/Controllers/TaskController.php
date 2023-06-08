@@ -64,7 +64,7 @@ class TaskController extends Controller
 
         $task_array = $projectTasks->get();
 
-        return view('task.list', compact('task_array', 'company', 'project'));
+        return view('task.list', compact('task_array', 'company', 'project', 'authUser'));
     }
 
     /**
@@ -99,6 +99,40 @@ class TaskController extends Controller
 
         $projectStageList = $projectTask->project()?->get()[0]?->task_stages()->get()?->toArray();
         //$projectStage['id'] === $projectTask->stage_id
-        return view('task.view' , compact('projectTask', 'projectStageList'));
+
+        return view('task.view' , compact('projectTask', 'projectStageList', 'authUser'));
+    }
+
+
+    public function taskUpdate(Request $request)
+    {
+        return 1;
+    }
+
+    public function likes(Request $request)
+    {
+        $data = $request->post();
+
+        $isLiked = $data['isLiked'];
+
+        $taskId = $data['task']['id'];
+        $userId = $data['user']['id'];
+
+        $model = ProjectTask::find($taskId);
+        $likes = json_decode($model->likes);
+
+        if ($isLiked === 'true') {
+            $likes[] = (int)$userId;
+        } else {
+            $key = array_search((int)$userId, $likes); // Ищем индекс значения 2 в массиве
+            if ($key !== false) {
+                array_splice($likes, $key, 1);
+            }
+        }
+
+        $model->likes = $likes;
+        $model->save();
+
+        return 1;
     }
 }
